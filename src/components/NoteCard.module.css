@@ -1,0 +1,10 @@
+.card{
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 180px;
+    max-height: 200px;
+    background-color: bisque;
+    flex: 1 1 auto;
+    word-wrap: break-word;
+    white-space: normal;
+}
