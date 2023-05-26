@@ -14,8 +14,9 @@ export async function getNote(): Promise<INoteContent[]> {
   const response = await axios.get<INoteContent[]>(urlNotes);
 
   const notes = response.data;
+  const reversedNotes = notes.reverse()
 
-  return notes;
+  return reversedNotes;
 }
 
 export async function deleteNote(noteId: number) {

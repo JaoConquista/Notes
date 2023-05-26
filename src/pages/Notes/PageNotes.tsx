@@ -1,3 +1,4 @@
+import React from "react"
 import { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import SubmitButton from "../../components/SubmitButton";
@@ -11,6 +12,7 @@ import {
   editNote,
 } from "../../services/NoteService";
 
+import {Main, Result, Search} from "./PageNotes.style"
 import NotePagestyles from "./PageNotes.module.css";
 
 const PageNotes = () => {
@@ -55,6 +57,7 @@ const PageNotes = () => {
       await postNote(note);
 
       await fecthData();
+
     } catch (error) {
       return error;
     }
@@ -76,6 +79,8 @@ const PageNotes = () => {
 
   const updateNote = async (note: INoteContent) => {
     await editNote(note);
+
+    await fecthData()
   };
 
   const handleModalSubmit = async (note: INoteContent) => {
@@ -94,6 +99,7 @@ const PageNotes = () => {
     await fecthData();
 
     setNote({ id: note.id, title: "", content: "" });
+
   };
 
   const clearNoteToEdit = () => {
@@ -102,7 +108,7 @@ const PageNotes = () => {
 
   return (
     <div className="notes">
-      <div className={NotePagestyles["main"]}>
+      <Main>
         <div className="title">
           <h1>Notes</h1>
         </div>
@@ -112,6 +118,7 @@ const PageNotes = () => {
               id="outlined-controlled"
               sx={{ margin: "10px" }}
               autoComplete="off"
+              required
               label="Título"
               value={note.title}
               onChange={(e) => setNote({ ...note, title: e.target.value })}
@@ -120,6 +127,7 @@ const PageNotes = () => {
               id="outlined-controlled"
               sx={{ margin: "10px" }}
               autoComplete="off"
+              required
               label="Conteúdo"
               value={note.content}
               onChange={(e) => setNote({ ...note, content: e.target.value })}
@@ -127,19 +135,21 @@ const PageNotes = () => {
             <SubmitButton name="Criar" />
           </form>
         </div>
-      </div>
+      </Main>
+      
       {noteList.length > 0 && (
-        <div className={NotePagestyles["search"]}>
+        <Search>
           <TextField
             id="outlined-controlled"
-            sx={{ margin: "10px", width: "30em" }}
+            sx={{ margin: "10px", maxWidth: "30em", minWidth: "20em" }}
             label="Buscar"
             onChange={(e) => setSearchInput(e.target.value)}
           />
-        </div>
+        </Search>
       )}
-      <div className="result">
-        {showModal && noteToEdit && (
+      <div>
+        <Result>
+          {showModal && noteToEdit && (
           <Modal
             onClose={() => clearNoteToEdit()}
             note={noteToEdit}
@@ -156,6 +166,7 @@ const PageNotes = () => {
               onEdit={handleEdit}
             />
           ))}
+        </Result>
       </div>
     </div>
   );

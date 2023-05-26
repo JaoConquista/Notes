@@ -6,9 +6,11 @@ import Typography from "@mui/material/Typography";
 
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import styleCard from "./NoteCard.module.css";
+import { useState, useEffect } from "react"
 
 import { INoteContent } from "../Interfaces/INote";
+import { CardStyled } from "./NotesCard.style";
+
 
 type NoteCard = {
   note: INoteContent;
@@ -17,32 +19,42 @@ type NoteCard = {
 };
 
 const NoteCard = ({ note, onEdit, onDelete }: NoteCard) => {
+
   return (
-    <Card
-      className={styleCard["card"]}
-      sx={{
-        width: "18em",
-        m: 1,
-      }}
-    >
-      <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Tarefa
-        </Typography>
-        <Typography variant="h5">{note.title}</Typography>
-        <Typography variant="body2">{note.content}</Typography>
-      </CardContent>
-      <CardActions
-        sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}
-      >
-        <IconButton onClick={() => onEdit(note)}>
-          <EditIcon color="primary" />
-        </IconButton>
-        <IconButton onClick={() => onDelete(note.id)}>
-          <DeleteIcon color="warning" />
-        </IconButton>
-      </CardActions>
-    </Card>
+    <div>
+        <CardStyled>
+          <Card
+            sx={{
+              maxWidth: "25em", minWidth: "12em", display: "flex",
+              flexDirection: "column", justifyContent: "space-between"
+            }}>
+            <CardContent
+              sx={{ padding: "0 5px 0 15px" }}>
+              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                Tarefa
+              </Typography>
+              <Typography variant="h5">{note.title}</Typography>
+              <Typography variant="body2">{note.content}</Typography>
+            </CardContent>
+            <CardActions
+              sx={{
+                display: "flex", justifyContent: "space-between", width: "96%",
+                alignItems: "center", height: "10%"
+              }}
+            >
+              <IconButton onClick={() => onEdit(note)}>
+                <EditIcon color="primary" />
+              </IconButton>
+              <IconButton onClick={() => onDelete(note.id)}>
+                <DeleteIcon color="warning" />
+              </IconButton>
+            </CardActions>
+          </Card>
+        </CardStyled>
+
+    </div>
+
+
   );
 };
 
