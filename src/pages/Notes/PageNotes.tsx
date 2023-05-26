@@ -11,9 +11,7 @@ import {
   editNote,
 } from "../../services/NoteService";
 
-import NotePagestyles from "./PageNotes.module.css"
-
-let id: number = 0;
+import NotePagestyles from "./PageNotes.module.css";
 
 const PageNotes = () => {
   //Qual a melhor forma de inserir valores em um state de objetos ?
@@ -23,12 +21,10 @@ const PageNotes = () => {
     title: " ",
     content: " ",
   });
-
   const [noteList, setNoteList] = useState<INoteContent[]>([]);
-
   const [showModal, setShowModal] = useState<boolean>(false);
-
   const [searchInput, setSearchInput] = useState<string>("");
+  const [noteToEdit, setNoteToEdit] = useState<INoteContent | null>(null);
 
   //filtro de notas
   const filteredNotes =
@@ -40,11 +36,11 @@ const PageNotes = () => {
         )
       : [];
 
-  console.log("renderizou");
+  useEffect(() => {
+    fecthData();
+  }, []);
 
-  const handleModalComponent = (value: boolean) => {
-    setShowModal(value);
-  };
+  const notesToShow = searchInput.length > 0 ? filteredNotes : noteList;
 
   const removeNote = async (id: number) => {
     await deleteNote(id);
@@ -70,15 +66,22 @@ const PageNotes = () => {
     setNoteList(data);
   };
 
-  const getNoteId = (noteId: number) => {
-    id = noteId;
-    handleModalComponent(true);
+  const handleEdit = (note: INoteContent) => {
+    setNoteToEdit(note);
+
+    setShowModal(true);
   };
 
-  const updateNote = async (note: INoteContent, noteId: number) => {
-    await editNote(note, noteId);
+  const handleDelete = (id: number) => removeNote(id);
 
-    handleModalComponent(false);
+  const updateNote = async (note: INoteContent) => {
+    await editNote(note);
+  };
+
+  const handleModalSubmit = async (note: INoteContent) => {
+    updateNote(note);
+    setShowModal(false);
+    clearNoteToEdit();
 
     await fecthData();
   };
@@ -93,9 +96,9 @@ const PageNotes = () => {
     setNote({ id: note.id, title: "", content: "" });
   };
 
-  useEffect(() => {
-    fecthData();
-  }, []);
+  const clearNoteToEdit = () => {
+    setNoteToEdit(null);
+  };
 
   return (
     <div className="notes">
@@ -125,43 +128,34 @@ const PageNotes = () => {
           </form>
         </div>
       </div>
-      {noteList.length> 0 && (
-          <div className={NotePagestyles["search"]}>
-            <TextField
-              id="outlined-controlled"
-              sx={{ margin: "10px", width: "30em" }}
-              label="Buscar"
-              onChange={(e) => setSearchInput(e.target.value)}
-            />
-          </div>
-        )}
-      <div className="result">
-        {showModal === true ? (
-          <Modal
-            handleShowModal={handleModalComponent}
-            handleEdit={updateNote}
-            noteId={id}
+      {noteList.length > 0 && (
+        <div className={NotePagestyles["search"]}>
+          <TextField
+            id="outlined-controlled"
+            sx={{ margin: "10px", width: "30em" }}
+            label="Buscar"
+            onChange={(e) => setSearchInput(e.target.value)}
           />
-        ) : filteredNotes.length > 0 ? (
-          filteredNotes.map((note, index) => (
-            <NoteCard
-              key={index}
-              note={note}
-              handleDelete={removeNote}
-              getNoteId={getNoteId}
-            />
-          ))
-        ) : (
-          noteList.length > 0 &&
-          noteList.map((note, index) => (
-            <NoteCard
-              key={index}
-              note={note}
-              handleDelete={removeNote}
-              getNoteId={getNoteId}
-            />
-          ))
+        </div>
+      )}
+      <div className="result">
+        {showModal && noteToEdit && (
+          <Modal
+            onClose={() => clearNoteToEdit()}
+            note={noteToEdit}
+            submit={handleModalSubmit}
+          />
         )}
+
+        {!showModal &&
+          notesToShow.map((note, index) => (
+            <NoteCard
+              key={index}
+              note={note}
+              onDelete={handleDelete}
+              onEdit={handleEdit}
+            />
+          ))}
       </div>
     </div>
   );

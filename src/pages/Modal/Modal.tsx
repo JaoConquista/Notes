@@ -1,26 +1,31 @@
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
-import {useState} from "react";
+import { useEffect, useState } from "react";
 
-import CheckIcon from '@mui/icons-material/Check';
+import CheckIcon from "@mui/icons-material/Check";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { INoteContent } from "../../Interfaces/INote";
 
 type Props = {
-    handleShowModal(value: boolean): void;
-    handleEdit(note: INoteContent, id: number): void;
-    noteId: number;
+  note: INoteContent;
+  onClose: () => void;
+  submit: (note: INoteContent) => void;
 };
 
-const Modal = ({handleShowModal, handleEdit, noteId}: Props) => {
+const Modal = ({ note, onClose, submit }: Props) => {
+  const [noteToEdit, setNoteToEdit] = useState<INoteContent | null>(null);
 
-  const [note, setNote] = useState<INoteContent>({
-    id: 0,
-    title: " ",
-    content: " "
-  })
+  useEffect(() => {
+    if (note) {
+      setNoteToEdit(note);
+    }
+  }, [note]);
 
-  console.log(noteId)
+  const handleSubmitClick = () => {
+    if (noteToEdit === null) return;
+
+    submit(noteToEdit);
+  };
 
   return (
     <div id="modal">
@@ -30,32 +35,38 @@ const Modal = ({handleShowModal, handleEdit, noteId}: Props) => {
       <div className="content">
         <form>
           <TextField
-            value={note.title}
+            value={noteToEdit?.title}
             id="outlined-controlled"
             sx={{ margin: "10px" }}
             label="Título"
-            onChange={(e) => setNote((prevNote: any) => ({
-              ...prevNote,
-              title: e.target.value
-            }))
-          }
+            onChange={(e) =>
+              setNoteToEdit((prevNote: any) => ({
+                ...prevNote,
+                title: e.target.value,
+              }))
+            }
           />
           <TextField
-            value={note.content}
+            value={noteToEdit?.content}
             id="outlined-controlled"
-            sx={{ margin: "10px"}}
+            sx={{ margin: "10px" }}
             label="Conteúdo"
-            onChange={(e) => setNote((prevNote: any) => ({
-              ...prevNote,
-              content: e.target.value
-            }))
-          }
+            onChange={(e) =>
+              setNoteToEdit((prevNote: any) => ({
+                ...prevNote,
+                content: e.target.value,
+              }))
+            }
           />
           <div className="buttons">
             <IconButton>
-              <CheckIcon color="primary" type="submit" onClick= {() => handleEdit(note, noteId)}/>
+              <CheckIcon
+                color="primary"
+                type="submit"
+                onClick={() => handleSubmitClick()}
+              />
             </IconButton>
-            <IconButton onClick={() => handleShowModal(false)}>
+            <IconButton onClick={() => onClose()}>
               <CancelIcon color="warning" />
             </IconButton>
           </div>
