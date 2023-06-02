@@ -12,7 +12,7 @@ import {
   editNote,
 } from "../../services/NoteService";
 
-import {Main, Result, Search} from "./PageNotes.style"
+import { Main, Result, Search } from "./styles"
 import NotePagestyles from "./PageNotes.module.css";
 
 const PageNotes = () => {
@@ -32,10 +32,10 @@ const PageNotes = () => {
   const filteredNotes =
     searchInput.length > 0
       ? noteList.filter(
-          (note) =>
-            note.title.includes(searchInput) ||
-            note.content.includes(searchInput)
-        )
+        (note) =>
+          note.title.includes(searchInput) ||
+          note.content.includes(searchInput)
+      )
       : [];
 
   useEffect(() => {
@@ -103,7 +103,7 @@ const PageNotes = () => {
   };
 
   const clearNoteToEdit = () => {
-    setNoteToEdit(null);
+    setShowModal(false);
   };
 
   return (
@@ -136,13 +136,16 @@ const PageNotes = () => {
           </form>
         </div>
       </Main>
-      
+
       {noteList.length > 0 && (
         <Search>
           <TextField
             id="outlined-controlled"
-            sx={{ margin: "10px", maxWidth: "30em", minWidth: "20em" }}
+            sx={{ margin: "10px", maxWidth: "30em", minWidth: "20em",
+            boxShadow: "2px 3px 5px rgba(0, 0, 0, 0.40), 0px 16px 10px -10px rgba(0, 0, 0, 0.28), 0px 0px 30px -5px rgba(0, 0, 0, 0.28)",
+            borderRadius: "10px", border: "none"}}
             label="Buscar"
+            autoComplete="off"
             onChange={(e) => setSearchInput(e.target.value)}
           />
         </Search>
@@ -150,22 +153,22 @@ const PageNotes = () => {
       <div>
         <Result>
           {showModal && noteToEdit && (
-          <Modal
-            onClose={() => clearNoteToEdit()}
-            note={noteToEdit}
-            submit={handleModalSubmit}
-          />
-        )}
-
-        {!showModal &&
-          notesToShow.map((note, index) => (
-            <NoteCard
-              key={index}
-              note={note}
-              onDelete={handleDelete}
-              onEdit={handleEdit}
+            <Modal
+              onClose={() => clearNoteToEdit()}
+              note={noteToEdit}
+              submit={handleModalSubmit}
             />
-          ))}
+          )}
+
+          {!showModal &&
+            notesToShow.map((note, index) => (
+                <NoteCard
+                key={index}
+                note={note}
+                onDelete={handleDelete}
+                onEdit={handleEdit}
+                />
+            ))}
         </Result>
       </div>
     </div>

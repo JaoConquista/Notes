@@ -8,6 +8,7 @@ import createStyle from "./CreateAccount.module.css"
 import {Link, useNavigate} from "react-router-dom"
 import {createAccount} from "../../services/AccountServices"
 import { Account } from "../../Interfaces/Account";
+import { succesNotify } from "../../utils/toast";
 
 
 
@@ -29,7 +30,9 @@ const CreateAccount = () => {
 
       createAccount(user)
 
-      navigate("/login")
+      
+
+      setTimeout(() => succesNotify(),navigate("/login"), 3000)
 
     } catch (error) {
 
@@ -37,7 +40,6 @@ const CreateAccount = () => {
 
     }
   }
-
   return (
     <div id={createStyle.create_account}>
       <div className="title">

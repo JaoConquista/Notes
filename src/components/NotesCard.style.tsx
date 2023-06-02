@@ -7,7 +7,5 @@ export const CardStyled = styled.div`
     flex-wrap: wrap;
     word-wrap: break-word;
     white-space: normal;
-
-    max-width: 18em;
     transition: 0.5s;
 `

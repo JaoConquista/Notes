@@ -14,3 +14,17 @@ export function createAccount(account: Account): Promise<Account> {
         })
     )
 }
+
+export async function getAccount (): Promise<Account[]> {
+    
+    try {
+
+        const repsonse = await axios.get<Account[]>(urlAccount)
+        const usersData =  repsonse.data
+        return usersData
+
+    } catch (error) {
+        throw new Error
+    }
+
+} 

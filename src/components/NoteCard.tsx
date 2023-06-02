@@ -25,8 +25,9 @@ const NoteCard = ({ note, onEdit, onDelete }: NoteCard) => {
         <CardStyled>
           <Card
             sx={{
-              maxWidth: "25em", minWidth: "12em", display: "flex",
-              flexDirection: "column", justifyContent: "space-between"
+              width: "17em", display: "flex",
+              flexDirection: "column", justifyContent: "space-between",
+              boxShadow: "2px 3px 5px rgba(0, 0, 0, 0.40), 0px 16px 10px -10px rgba(0, 0, 0, 0.28), 0px 0px 30px -5px rgba(0, 0, 0, 0.28);"
             }}>
             <CardContent
               sx={{ padding: "0 5px 0 15px" }}>
