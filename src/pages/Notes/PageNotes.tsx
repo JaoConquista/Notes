@@ -12,11 +12,14 @@ import {
   editNote,
 } from "../../services/NoteService";
 
-import { Main, Result, Search } from "./styles"
-import NotePagestyles from "./PageNotes.module.css";
+import { Main, Result, Search, Header, Title } from "./styles"
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 
 const PageNotes = () => {
   //Qual a melhor forma de inserir valores em um state de objetos ?
+
+
 
   const [note, setNote] = useState<INoteContent>({
     id: 0,
@@ -41,6 +44,7 @@ const PageNotes = () => {
   useEffect(() => {
     fecthData();
   }, []);
+
 
   const notesToShow = searchInput.length > 0 ? filteredNotes : noteList;
 
@@ -106,13 +110,25 @@ const PageNotes = () => {
     setShowModal(false);
   };
 
+  const logOut = () => {
+    localStorage.setItem("access", "false")
+
+    window.location.reload()
+  }
+
   return (
     <div className="notes">
       <Main>
-        <div className="title">
-          <h1>Notes</h1>
-        </div>
-        <div className={NotePagestyles["content"]}>
+        <Header>
+          <Title>
+            <h1>Notes</h1>
+          </Title>
+          <Stack direction="row" spacing={2}
+            sx={{width: "5%", display:"flex", justifyContent: "flex-end", paddingRigth: "30px"}}>
+            <Button onClick={() => logOut()}>Sair</Button>
+          </Stack>
+        </Header>
+        <div className="content">
           <form onSubmit={handleSubmit}>
             <TextField
               id="outlined-controlled"
@@ -141,9 +157,11 @@ const PageNotes = () => {
         <Search>
           <TextField
             id="outlined-controlled"
-            sx={{ margin: "10px", maxWidth: "30em", minWidth: "20em",
-            boxShadow: "2px 3px 5px rgba(0, 0, 0, 0.40), 0px 16px 10px -10px rgba(0, 0, 0, 0.28), 0px 0px 30px -5px rgba(0, 0, 0, 0.28)",
-            borderRadius: "10px", border: "none"}}
+            sx={{
+              margin: "10px", maxWidth: "30em", minWidth: "20em",
+              boxShadow: "2px 3px 5px rgba(0, 0, 0, 0.40), 0px 16px 10px -10px rgba(0, 0, 0, 0.28), 0px 0px 30px -5px rgba(0, 0, 0, 0.28)",
+              borderRadius: "10px", border: "none"
+            }}
             label="Buscar"
             autoComplete="off"
             onChange={(e) => setSearchInput(e.target.value)}
@@ -162,12 +180,12 @@ const PageNotes = () => {
 
           {!showModal &&
             notesToShow.map((note, index) => (
-                <NoteCard
+              <NoteCard
                 key={index}
                 note={note}
                 onDelete={handleDelete}
                 onEdit={handleEdit}
-                />
+              />
             ))}
         </Result>
       </div>

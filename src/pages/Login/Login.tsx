@@ -1,5 +1,6 @@
 import TextField from "@mui/material/TextField";
 import loginStyles from "./Login.module.css";
+import {Main, Form} from "./stylesLogin"
 import SubmitButton from "../../components/SubmitButton";
 import {Link, useNavigate} from "react-router-dom"
 import { getAccount } from "../../services/AccountServices";
@@ -14,7 +15,7 @@ type LoginProps  = {
 }
 
 interface LoginProp {
-  accessUser(value: boolean): void
+  accessUser(value: string | null): void
 }
 
 
@@ -59,7 +60,9 @@ const Login = ({accessUser}: LoginProp) => {
       else if(emailValidation.length >= 1 && passwordValidation.length >= 1){
         console.log(emailValidation, passwordValidation)
   
-        accessUser(true)
+        localStorage.setItem("access","true")
+
+        accessUser(localStorage.getItem("access"))
   
         navigate("/notes")
       }
@@ -76,16 +79,16 @@ const Login = ({accessUser}: LoginProp) => {
   
 
   return (
-    <div className={loginStyles.login}>
+    <Main>
       <div>
-        <h1>Login</h1>
+        <h1>Entrar</h1>
       </div>
-      <div id={loginStyles.login_inputs}>
+      <div style={{margin: "30px auto"}}>
         <ToastContainer/>
-            <form 
+            <Form 
               onSubmit={handleSubmit}>
               <TextField
-                id="login-input"
+                id="login-input1"
                 required
                 label="E-mail"
                 type="email"
@@ -93,7 +96,7 @@ const Login = ({accessUser}: LoginProp) => {
                 onChange={(e) => setUserLogin({...userLogin, email: e.target.value})}
               />
               <TextField
-                id="login-input"
+                id="login-input2"
                 label="Password"
                 type="password"
                 aria-required
@@ -102,12 +105,12 @@ const Login = ({accessUser}: LoginProp) => {
               />
 
               <SubmitButton name="Entrar"/>
-            </form>
+            </Form>
       </div>
       <div>
       <p>Ainda não tem conta ? <Link to="/">Crie aqui !</Link></p>
       </div>
-    </div>
+    </Main>
   );
 };
 

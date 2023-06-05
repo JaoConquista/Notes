@@ -9,9 +9,11 @@ import { useState } from "react";
 
 function App() {
 
-  const [accessUser, setAccessUser] = useState<boolean>(false)
+  const [accessUser, setAccessUser] = useState<string | null>(null)
 
-  const authAccess = (access: boolean) => {
+  // let access = localStorage.getItem("access")
+
+  const authAccess = (access: string) => {
     setAccessUser(access)
   }
 
@@ -21,7 +23,7 @@ function App() {
           <Routes>
             <Route path="/" element={<CreateAccount />}  />
             <Route path="/login" element={<Login accessUser={authAccess}/>} />
-            <Route path="/notes" element={accessUser ? <PageNotes/> : <Navigate to={"/login"}/>}/>
+            <Route path="/notes" element={accessUser == "true" ? <PageNotes/> : <Navigate to={"/login"}/>}/>
           </Routes>
       </BrowserRouter>
     </div>

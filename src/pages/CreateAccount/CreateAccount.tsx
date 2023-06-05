@@ -32,7 +32,7 @@ const CreateAccount = () => {
 
       succesNotify()
 
-      setTimeout(() => navigate("/login"), 3000)
+      setTimeout(() => navigate("/login"), 2500)
 
     } catch (error) {
 
@@ -43,7 +43,7 @@ const CreateAccount = () => {
   return (
     <div id={createStyle.create_account}>
       <div className="title">
-        <h1>Crie sua conta</h1>
+        <h1>Crie sua conta no Notes !</h1>
       </div>
     <div id={createStyle.form_create_account}>
             <form onSubmit={handleSubmit} >
