@@ -1,5 +1,4 @@
 import TextField from "@mui/material/TextField";
-import loginStyles from "./Login.module.css";
 import {Main, Form} from "./stylesLogin"
 import SubmitButton from "../../components/SubmitButton";
 import {Link, useNavigate} from "react-router-dom"
@@ -14,12 +13,10 @@ type LoginProps  = {
   senha: string
 }
 
-interface LoginProp {
-  accessUser(value: string | null): void
-}
 
 
-const Login = ({accessUser}: LoginProp) => {
+
+const Login = () => {
 
   const navigate = useNavigate()
 
@@ -61,8 +58,6 @@ const Login = ({accessUser}: LoginProp) => {
         console.log(emailValidation, passwordValidation)
   
         localStorage.setItem("access","true")
-
-        accessUser(localStorage.getItem("access"))
   
         navigate("/notes")
       }
