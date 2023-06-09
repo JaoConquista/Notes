@@ -2,7 +2,6 @@ import styled from "styled-components"
 
 export const Title = styled.div`
 
-    /* border: 1px solid #000; */
     text-align: center;
     width: 110%;
     padding-left: 70px;
@@ -14,7 +13,6 @@ export const Title = styled.div`
 export const Header = styled.div`
 
 display: flex;
-/* border: 1px solid blue; */
 width: 100%
 
 `
@@ -58,11 +56,35 @@ export const Result = styled.div`
     }
 `
 
-// export const Column = styled.div`
-//     -webkit-column-count: 3; /* Chrome, Safari, Opera */
-//     -moz-column-count: 3; /* Firefox */
-//      column-count: 1;
-//     height: 100%;
-//     column-gap: .5rem;
-//     border: 1px solid #000;
-// `
+export const Footer = styled.div`
+
+@media only screen and (max-width: 1500px) {
+    display: none;
+    }
+
+@media only screen and (max-width: 760px) {
+    background:  #3A3A3A;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    position:fixed;
+    bottom:0px;
+    left:0px;
+
+}
+
+
+`
+
+export const Button1 = styled.button`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100px;
+    height: 46px;
+    width: 46px;
+    background: #3A3A3A;
+    border: 3px solid #000;
+    
+`

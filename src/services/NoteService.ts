@@ -7,6 +7,7 @@ export function postNote(note: INoteContent): Promise<any> {
   return axios.post(urlNotes, {
     title: note.title,
     content: note.content,
+    color: note.color
   });
 }
 

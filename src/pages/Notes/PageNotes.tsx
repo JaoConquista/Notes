@@ -12,19 +12,30 @@ import {
   editNote,
 } from "../../services/NoteService";
 
-import { Main, Result, Search, Header, Title } from "./styles"
+import { Main, Result, Search, Header, Title, Footer, Button1 } from "./styles"
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import AddIcon from '@mui/icons-material/Add';
+import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+
+
 
 const PageNotes = () => {
   //Qual a melhor forma de inserir valores em um state de objetos ?
+  const { logout } = useAuth()
 
+  const navigate = useNavigate()
 
+  const colorsList = ["#ebf781", "#a5f5a5", "#f19c9c", "#bab6f3", "#ebf781", 
+                      "#a5f5a5", "#f19c9c", "#bab6f3", "#ebf781", "#a5f5a5", 
+                      "#f19c9c", "#bab6f3"]
 
   const [note, setNote] = useState<INoteContent>({
     id: 0,
     title: " ",
     content: " ",
+    color: " "
   });
   const [noteList, setNoteList] = useState<INoteContent[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -58,6 +69,7 @@ const PageNotes = () => {
 
   const createNote = async (note: INoteContent) => {
     try {
+
       await postNote(note);
 
       await fecthData();
@@ -66,6 +78,15 @@ const PageNotes = () => {
       return error;
     }
   };
+
+  const colorNote = () => {
+    let randomColor = colorsList[Math.floor(Math.random() * (colorsList.length))]
+
+    setNote(prevNote => ({
+      ...prevNote,
+      color: randomColor
+    }));
+  }
 
   const fecthData = async () => {
     const data = await getNote();
@@ -98,11 +119,15 @@ const PageNotes = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    setTimeout(() => colorNote(), 500)
+
+    console.log(note)
+
     await createNote(note);
 
     await fecthData();
 
-    setNote({ id: note.id, title: "", content: "" });
+    setNote({ id: note.id, title: "", content: "", color: "" });
 
   };
 
@@ -111,11 +136,10 @@ const PageNotes = () => {
   };
 
   const logOut = () => {
-    localStorage.setItem("access", "false")
+    logout()
 
-    window.location.reload()
+    navigate("/login")
   }
-
   return (
     <div className="notes">
       <Main>
@@ -124,11 +148,11 @@ const PageNotes = () => {
             <h1>Notes</h1>
           </Title>
           <Stack direction="row" spacing={2}
-            sx={{width: "5%", display:"flex", justifyContent: "flex-end", paddingRigth: "30px"}}>
+            sx={{ width: "5%", display: "flex", justifyContent: "flex-end", paddingRigth: "30px" }}>
             <Button onClick={() => logOut()}>Sair</Button>
           </Stack>
         </Header>
-        <div className="content">
+        <div>
           <form onSubmit={handleSubmit}>
             <TextField
               id="outlined-controlled"
@@ -183,12 +207,18 @@ const PageNotes = () => {
               <NoteCard
                 key={index}
                 note={note}
+                color={note.color}
                 onDelete={handleDelete}
                 onEdit={handleEdit}
               />
             ))}
         </Result>
       </div>
+      <Footer>
+        <Button1>
+          <AddIcon fontSize="small" sx={{color:"#ccc"}} />
+        </Button1>
+      </Footer>
     </div>
   );
 };

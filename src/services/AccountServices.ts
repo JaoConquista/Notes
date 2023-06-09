@@ -7,7 +7,7 @@ const urlAccount = "  http://localhost:3000/users"
 export function createAccount(account: Account): Promise<Account> {
 
     return (
-            axios.post(urlAccount, {
+        axios.post(urlAccount, {
             name: account.name,
             email: account.email,
             password: account.password,
@@ -15,16 +15,15 @@ export function createAccount(account: Account): Promise<Account> {
     )
 }
 
-export async function getAccount (): Promise<Account[]> {
-    
+export async function getAccount(): Promise<Account[]> {
     try {
-
         const repsonse = await axios.get<Account[]>(urlAccount)
-        const usersData =  repsonse.data
+        const usersData = repsonse.data
         return usersData
 
     } catch (error) {
-        throw new Error
+        console.error(error)
+        return []
     }
 
 } 
