@@ -1,7 +1,5 @@
-import React from "react"
+import React, { useContext } from "react"
 import { useEffect, useState } from "react";
-import TextField from "@mui/material/TextField";
-import SubmitButton from "../../components/SubmitButton";
 import NoteCard from "../../components/NoteCard";
 import { INoteContent } from "../../Interfaces/INote";
 import Modal from "../Modal/Modal";
@@ -11,25 +9,34 @@ import {
   postNote,
   editNote,
 } from "../../services/NoteService";
+import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import Switch from 'react-switch'
 
-import { Main, Result, Search, Header, Title, Footer, Button1 } from "./styles"
+//Styles
+import TextField from "@mui/material/TextField";
+import SubmitButton from "../../components/SubmitButton";
+import { Main, Content, Result, Search, Header, Title, Footer, Button1 } from "./styles"
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import AddIcon from '@mui/icons-material/Add';
-import { useAuth } from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { ThemeContext } from "styled-components";
 
+interface Props {
+  toggleTheme(): void;
+}
 
-
-const PageNotes = () => {
+const PageNotes = ({toggleTheme}: Props) => {
   //Qual a melhor forma de inserir valores em um state de objetos ?
   const { logout } = useAuth()
 
   const navigate = useNavigate()
 
-  const colorsList = ["#ebf781", "#a5f5a5", "#f19c9c", "#bab6f3", "#ebf781", 
-                      "#a5f5a5", "#f19c9c", "#bab6f3", "#ebf781", "#a5f5a5", 
-                      "#f19c9c", "#bab6f3"]
+  const colorsList = ["#ebf781", "#a5f5a5", "#f19c9c", "#bab6f3", "#dfb1ec", 
+                      "#a5f5a5", "#9ceef1", "#dfb1ec", "#ebf781", "#a5f5a5", 
+                      "#f19c9c", "#dfb1ec"]
+
+  const {colors, title} =  useContext(ThemeContext);
 
   const [note, setNote] = useState<INoteContent>({
     id: 0,
@@ -127,7 +134,7 @@ const PageNotes = () => {
 
     await fecthData();
 
-    setNote({ id: note.id, title: "", content: "", color: "" });
+    setNote({ id: note.id, title: " ", content: " ", color: " " });
 
   };
 
@@ -141,8 +148,8 @@ const PageNotes = () => {
     navigate("/login")
   }
   return (
-    <div className="notes">
-      <Main>
+    <Main>
+      <Content>
         <Header>
           <Title>
             <h1>Notes</h1>
@@ -150,32 +157,47 @@ const PageNotes = () => {
           <Stack direction="row" spacing={2}
             sx={{ width: "5%", display: "flex", justifyContent: "flex-end", paddingRigth: "30px" }}>
             <Button onClick={() => logOut()}>Sair</Button>
+            <Switch
+              onChange={() => toggleTheme()}
+              checked={title === 'dark'}
+              checkedIcon={false}
+              uncheckedIcon={false}
+              height={10}
+              width={40}
+              handleDiameter={15}
+            />
           </Stack>
         </Header>
         <div>
           <form onSubmit={handleSubmit}>
             <TextField
               id="outlined-controlled"
-              sx={{ margin: "10px" }}
+              sx={{ margin: "10px", background: `${colors.inputBackground}`, borderRadius: "10px"}}
               autoComplete="off"
               required
               label="Título"
+              InputLabelProps={{
+                sx: {color: `${colors.text}`, fontSize:"14px"}
+              }}
               value={note.title}
               onChange={(e) => setNote({ ...note, title: e.target.value })}
             />
             <TextField
               id="outlined-controlled"
-              sx={{ margin: "10px" }}
+              sx={{ margin: "10px", background: `${colors.inputBackground}`, borderRadius: "10px"}}
               autoComplete="off"
               required
               label="Conteúdo"
+              InputLabelProps={{
+                sx: {color: `${colors.text}`}
+             }}
               value={note.content}
               onChange={(e) => setNote({ ...note, content: e.target.value })}
             />
             <SubmitButton name="Criar" />
           </form>
         </div>
-      </Main>
+      </Content>
 
       {noteList.length > 0 && (
         <Search>
@@ -184,7 +206,7 @@ const PageNotes = () => {
             sx={{
               margin: "10px", maxWidth: "30em", minWidth: "20em",
               boxShadow: "2px 3px 5px rgba(0, 0, 0, 0.40), 0px 16px 10px -10px rgba(0, 0, 0, 0.28), 0px 0px 30px -5px rgba(0, 0, 0, 0.28)",
-              borderRadius: "10px", border: "none"
+              borderRadius: "10px", border: "none", background: `${colors.inputBackground}`
             }}
             label="Buscar"
             autoComplete="off"
@@ -216,10 +238,10 @@ const PageNotes = () => {
       </div>
       <Footer>
         <Button1>
-          <AddIcon fontSize="small" sx={{color:"#ccc"}} />
+          <AddIcon fontSize="medium" sx={{color: "#ccc"}} />
         </Button1>
       </Footer>
-    </div>
+    </Main>
   );
 };
 

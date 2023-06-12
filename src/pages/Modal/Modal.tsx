@@ -38,7 +38,6 @@ const Modal = ({ note, onClose, submit }: Props) => {
             value={noteToEdit?.title}
             id="outlined-controlled"
             sx={{ margin: "10px" }}
-            label="Título"
             onChange={(e) =>
               setNoteToEdit((prevNote: any) => ({
                 ...prevNote,
@@ -50,7 +49,6 @@ const Modal = ({ note, onClose, submit }: Props) => {
             value={noteToEdit?.content}
             id="outlined-controlled"
             sx={{ margin: "10px" }}
-            label="Conteúdo"
             onChange={(e) =>
               setNoteToEdit((prevNote: any) => ({
                 ...prevNote,

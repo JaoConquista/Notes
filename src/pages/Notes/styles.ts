@@ -1,14 +1,22 @@
 import styled from "styled-components"
 
-export const Title = styled.div`
+export const Main = styled.main`
+''
 
-    text-align: center;
-    width: 110%;
-    padding-left: 70px;
+    background-color: ${props => props.theme.colors.background};
 
+    color: ${props => props.theme.colors.primary}
 
 `
 
+export const Title = styled.div`
+
+    text-align: left;
+    padding-left: 30px;
+    width: 110%;
+
+
+`
 
 export const Header = styled.div`
 
@@ -17,8 +25,7 @@ width: 100%
 
 `
 
-
-export const Main = styled.div`
+export const Content = styled.div`
     height: 12em;
     margin: auto;
     display: flex;
@@ -27,7 +34,6 @@ export const Main = styled.div`
     align-items: center;
     text-align: center;
 `
-
 
 export const Search = styled.div`
     margin: 0 auto;
@@ -52,7 +58,7 @@ export const Result = styled.div`
     column-count:3 ;
     }
     @media only screen and (max-width: 650px) {
-    column-count:2 ;
+    column-count:2 
     }
 `
 
@@ -65,7 +71,6 @@ export const Footer = styled.div`
 @media only screen and (max-width: 760px) {
     background:  #3A3A3A;
     width: 100%;
-    height: 60px;
     display: flex;
     justify-content: center;
     position:fixed;
