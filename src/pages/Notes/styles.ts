@@ -1,11 +1,12 @@
 import styled from "styled-components"
 
-export const Main = styled.main`
+export const App = styled.div`
 
+    transition: 1s;
 
-    background-color: ${props => props.theme.colors.background};
+    padding: 0;
+    margin: 0;
 
-    color: ${props => props.theme.colors.primary}
 
 `
 
@@ -47,6 +48,8 @@ export const Result = styled.div`
     max-width: 98vw;
     margin: 0 auto;
     margin: 10px;
+    padding-bottom: 10px;
+    margin: 0;
      /*display: flex;
     flex-wrap: wrap;
     margin: 0 auto;
@@ -56,6 +59,7 @@ export const Result = styled.div`
 
     @media only screen and (max-width: 768px) {
     column-count:3 ;
+    padding-bottom: 70px;
     }
     @media only screen and (max-width: 650px) {
     column-count:2 
@@ -73,23 +77,20 @@ export const Footer = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
-    position:fixed;
-    bottom:0px;
-    left:0px;
+    position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
 
 }
 
 
 `
 
-export const Button1 = styled.button`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 100px;
-    height: 46px;
-    width: 46px;
-    background: #3A3A3A;
-    border: 3px solid #000;
-    
-`
+export const NavBar = styled.div`
+    /* border: 1px solid red; */
+    background-color: transparent;
+    position: fixed;
+    top: 580px;
+    `

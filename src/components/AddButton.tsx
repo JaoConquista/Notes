@@ -1,20 +1,15 @@
 import Button from "@mui/material/Button"
 import AddIcon from '@mui/icons-material/Add';
 
-type SubmitButton = {
-  name: string
-}
-  
 
-
-const SubmitButton = ({name}: SubmitButton) => {
+const AddButton = () => {
   return (
     <div>
         <Button type="submit" variant="contained" >
-            {name}
+            <AddIcon fontSize="small"/>
         </Button>
     </div>
   )
 }
 
-export default SubmitButton
+export default AddButton

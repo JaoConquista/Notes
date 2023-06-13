@@ -15,28 +15,28 @@ import Switch from 'react-switch'
 
 //Styles
 import TextField from "@mui/material/TextField";
-import SubmitButton from "../../components/SubmitButton";
-import { Main, Content, Result, Search, Header, Title, Footer, Button1 } from "./styles"
+import { App, Content, Result, Search, Header, Title, Footer, NavBar} from "./styles"
 import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
 import AddIcon from '@mui/icons-material/Add';
+import Stack from '@mui/material/Stack';
 import { ThemeContext } from "styled-components";
+import AddButton from "../../components/AddButton";
 
 interface Props {
   toggleTheme(): void;
 }
 
-const PageNotes = ({toggleTheme}: Props) => {
+const PageNotes = ({ toggleTheme }: Props) => {
   //Qual a melhor forma de inserir valores em um state de objetos ?
   const { logout } = useAuth()
 
   const navigate = useNavigate()
 
-  const colorsList = ["#ebf781", "#a5f5a5", "#f19c9c", "#bab6f3", "#dfb1ec", 
-                      "#a5f5a5", "#9ceef1", "#dfb1ec", "#ebf781", "#a5f5a5", 
-                      "#f19c9c", "#dfb1ec"]
+  const colorsList = ["#ebf781", "#a5f5a5", "#f19c9c", "#bab6f3", "#dfb1ec",
+    "#a5f5a5", "#9ceef1", "#dfb1ec", "#ebf781", "#a5f5a5",
+    "#f19c9c", "#dfb1ec"]
 
-  const {colors, title} =  useContext(ThemeContext);
+  const { colors, title } = useContext(ThemeContext);
 
   const [note, setNote] = useState<INoteContent>({
     id: 0,
@@ -148,14 +148,14 @@ const PageNotes = ({toggleTheme}: Props) => {
     navigate("/login")
   }
   return (
-    <Main>
+    <App>
       <Content>
         <Header>
           <Title>
             <h1>Notes</h1>
           </Title>
           <Stack direction="row" spacing={2}
-            sx={{ width: "5%", display: "flex", justifyContent: "flex-end", paddingRigth: "30px" }}>
+            sx={{ width: "5%", display: "flex", justifyContent: "flex-end", alignItems: "center", paddingRigth: "30px" }}>
             <Button onClick={() => logOut()}>Sair</Button>
             <Switch
               onChange={() => toggleTheme()}
@@ -172,29 +172,29 @@ const PageNotes = ({toggleTheme}: Props) => {
           <form onSubmit={handleSubmit}>
             <TextField
               id="outlined-controlled"
-              sx={{ margin: "10px", background: `${colors.inputBackground}`, borderRadius: "10px"}}
+              sx={{ margin: "10px", background: `${colors.inputBackground}`, borderRadius: "10px" }}
               autoComplete="off"
               required
               label="Título"
               InputLabelProps={{
-                sx: {color: `${colors.text}`, fontSize:"14px"}
+                sx: { color: `${colors.text}` }
               }}
               value={note.title}
               onChange={(e) => setNote({ ...note, title: e.target.value })}
             />
             <TextField
               id="outlined-controlled"
-              sx={{ margin: "10px", background: `${colors.inputBackground}`, borderRadius: "10px"}}
+              sx={{ margin: "10px", background: `${colors.inputBackground}`, borderRadius: "10px" }}
               autoComplete="off"
               required
               label="Conteúdo"
               InputLabelProps={{
-                sx: {color: `${colors.text}`}
-             }}
+                sx: { color: `${colors.text}` }
+              }}
               value={note.content}
               onChange={(e) => setNote({ ...note, content: e.target.value })}
             />
-            <SubmitButton name="Criar" />
+            <AddButton />
           </form>
         </div>
       </Content>
@@ -215,15 +215,14 @@ const PageNotes = ({toggleTheme}: Props) => {
         </Search>
       )}
       <div>
+        {showModal && noteToEdit && (
+          <Modal
+            onClose={() => clearNoteToEdit()}
+            note={noteToEdit}
+            submit={handleModalSubmit}
+          />
+        )}
         <Result>
-          {showModal && noteToEdit && (
-            <Modal
-              onClose={() => clearNoteToEdit()}
-              note={noteToEdit}
-              submit={handleModalSubmit}
-            />
-          )}
-
           {!showModal &&
             notesToShow.map((note, index) => (
               <NoteCard
@@ -237,11 +236,20 @@ const PageNotes = ({toggleTheme}: Props) => {
         </Result>
       </div>
       <Footer>
-        <Button1>
-          <AddIcon fontSize="medium" sx={{color: "#ccc"}} />
-        </Button1>
+        <NavBar>
+          <Button
+            sx={{background: '#3A3A3A',
+              border: `3px solid ${colors.background}`, borderRadius:"100px", height: "58px", width: "58px",
+              display: "flex", justifyContent: "center", position: "relative",
+              zIndex: "1", '&:hover':{
+                background: `3px solid ${colors.secondary}`
+              }
+              }}>
+            <AddIcon fontSize="medium" sx={{ color: "#ccc" }} />
+          </Button>
+        </NavBar>
       </Footer>
-    </Main>
+    </App>
   );
 };
 

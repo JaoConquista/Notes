@@ -1,9 +1,11 @@
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
-import { useEffect, useState } from "react";
-
+import { ThemeContext } from "styled-components";
 import CheckIcon from "@mui/icons-material/Check";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { Form, Main } from "./stylesModal";
+
+import { useContext, useEffect, useState } from "react";
 import { INoteContent } from "../../Interfaces/INote";
 
 type Props = {
@@ -14,6 +16,7 @@ type Props = {
 
 const Modal = ({ note, onClose, submit }: Props) => {
   const [noteToEdit, setNoteToEdit] = useState<INoteContent | null>(null);
+  const { colors } = useContext(ThemeContext)
 
   useEffect(() => {
     if (note) {
@@ -28,16 +31,20 @@ const Modal = ({ note, onClose, submit }: Props) => {
   };
 
   return (
-    <div id="modal">
+    <Main>
       <div className="title">
         <h1>Editando ...</h1>
       </div>
       <div className="content">
-        <form>
+        <Form>
           <TextField
             value={noteToEdit?.title}
+            autoComplete="off"
             id="outlined-controlled"
-            sx={{ margin: "10px" }}
+            sx={{ margin: "10px", background: `${colors.inputBackground}`, borderRadius: "10px" }}
+            InputLabelProps={{
+              sx: { color: `${colors.text}` }
+            }}
             onChange={(e) =>
               setNoteToEdit((prevNote: any) => ({
                 ...prevNote,
@@ -47,8 +54,12 @@ const Modal = ({ note, onClose, submit }: Props) => {
           />
           <TextField
             value={noteToEdit?.content}
+            autoComplete="off"
             id="outlined-controlled"
-            sx={{ margin: "10px" }}
+            sx={{ margin: "10px", background: `${colors.inputBackground}`, borderRadius: "10px" }}
+            InputLabelProps={{
+              sx: { color: `${colors.text}` }
+            }}
             onChange={(e) =>
               setNoteToEdit((prevNote: any) => ({
                 ...prevNote,
@@ -68,9 +79,9 @@ const Modal = ({ note, onClose, submit }: Props) => {
               <CancelIcon color="warning" />
             </IconButton>
           </div>
-        </form>
+        </Form>
       </div>
-    </div>
+    </Main>
   );
 };
 
