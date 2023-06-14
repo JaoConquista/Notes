@@ -15,12 +15,18 @@ import Switch from 'react-switch'
 
 //Styles
 import TextField from "@mui/material/TextField";
-import { App, Content, Result, Search, Header, Title, Footer, NavBar} from "./styles"
+import { App, Content, Result, Search, Header, Title, Footer, NavBar } from "./styles"
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import ModeIcon from '@mui/icons-material/Mode';
+import MicNoneRoundedIcon from '@mui/icons-material/MicNoneRounded';
+import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 import Stack from '@mui/material/Stack';
 import { ThemeContext } from "styled-components";
 import AddButton from "../../components/AddButton";
+import { titleRequired } from "../../utils/toast";
+import { ToastContainer } from "react-toastify";
 
 interface Props {
   toggleTheme(): void;
@@ -123,18 +129,35 @@ const PageNotes = ({ toggleTheme }: Props) => {
     await fecthData();
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
 
-    setTimeout(() => colorNote(), 500)
+    if (e) {
+      e.preventDefault();
 
-    console.log(note)
+      setTimeout(() => colorNote(), 500)
 
-    await createNote(note);
+      console.log(note)
 
-    await fecthData();
+      await createNote(note);
 
-    setNote({ id: note.id, title: " ", content: " ", color: " " });
+      await fecthData();
+
+      setNote({ id: note.id, title: " ", content: " ", color: " " });
+    } else {
+      if (note.title == " ") {
+        titleRequired()
+      } else {
+        setTimeout(() => colorNote(), 500)
+
+        console.log(note)
+
+        await createNote(note);
+
+        await fecthData();
+      }
+
+      setNote({ id: note.id, title: " ", content: " ", color: " " });
+    }
 
   };
 
@@ -149,6 +172,7 @@ const PageNotes = ({ toggleTheme }: Props) => {
   }
   return (
     <App>
+      <ToastContainer/>
       <Content>
         <Header>
           <Title>
@@ -236,18 +260,26 @@ const PageNotes = ({ toggleTheme }: Props) => {
         </Result>
       </div>
       <Footer>
+        <CheckBoxIcon fontSize="small" sx={{color: '#e9ecef'}}/>
+        <CollectionsOutlinedIcon fontSize="small" sx={{color: '#e9ecef'}}/>
+
         <NavBar>
           <Button
-            sx={{background: '#3A3A3A',
-              border: `3px solid ${colors.background}`, borderRadius:"100px", height: "58px", width: "58px",
+            onClick={() => handleSubmit()}
+            sx={{
+              background: '#3A3A3A',
+              border: `3px solid ${colors.background}`, borderRadius: "100px", height: "58px", width: "58px",
               display: "flex", justifyContent: "center", position: "relative",
-              zIndex: "1", '&:hover':{
-                background: `3px solid ${colors.secondary}`
+              zIndex: "1", '&:hover': {
+                background: colors.inputBackground,
               }
-              }}>
+            }}>
             <AddIcon fontSize="medium" sx={{ color: "#ccc" }} />
           </Button>
         </NavBar>
+
+        <MicNoneRoundedIcon fontSize="small" sx={{color: '#e9ecef'}}/>
+        <ModeIcon fontSize="small" sx={{color: '#e9ecef'}}/>
       </Footer>
     </App>
   );

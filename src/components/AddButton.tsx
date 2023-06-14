@@ -1,14 +1,15 @@
 import Button from "@mui/material/Button"
 import AddIcon from '@mui/icons-material/Add';
+import {AddButtonStyle} from "./AddButtonStyle";
 
 
 const AddButton = () => {
   return (
-    <div>
-        <Button type="submit" variant="contained" >
+    <AddButtonStyle>
+        <Button type="submit" variant="contained">
             <AddIcon fontSize="small"/>
         </Button>
-    </div>
+    </AddButtonStyle>
   )
 }
 

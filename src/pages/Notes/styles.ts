@@ -34,13 +34,21 @@ export const Content = styled.div`
     justify-content: center;
     align-items: center;
     text-align: center;
+
+    @media only screen and (max-width: 760px) {
+        form{
+            display: flex;
+            margin-top: 20px;
+        }
+    }
 `
 
 export const Search = styled.div`
     margin: 0 auto;
-    margin-top: 15px;
     text-align: center;
     margin-bottom: 10px;
+    border-top: 1px solid #ccc;
+    width: 90%;
 `
 
 export const Result = styled.div`
@@ -72,16 +80,17 @@ export const Footer = styled.div`
     display: none;
     }
 
-@media only screen and (max-width: 760px) {
+@media only screen and (max-width: 768px) {
     background:  #3A3A3A;
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
+    align-items: center;
     position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 50px;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
 
 }
 
@@ -92,5 +101,7 @@ export const NavBar = styled.div`
     /* border: 1px solid red; */
     background-color: transparent;
     position: fixed;
-    top: 580px;
-    `
+    left: 1;
+    bottom: 20px;
+    z-index: 100;
+`
