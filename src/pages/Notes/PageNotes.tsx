@@ -15,7 +15,7 @@ import Switch from 'react-switch'
 
 //Styles
 import TextField from "@mui/material/TextField";
-import { App, Content, Result, Search, Header, Title, Footer, NavBar } from "./styles"
+import { App, Content, Result, Search, Title, Footer, NavBar, AddNoteMobile } from "./styles"
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
@@ -23,10 +23,23 @@ import ModeIcon from '@mui/icons-material/Mode';
 import MicNoneRoundedIcon from '@mui/icons-material/MicNoneRounded';
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 import Stack from '@mui/material/Stack';
+import Avatar from '@mui/material/Avatar';
+import CheckIcon from "@mui/icons-material/Check";
+import Fab from '@mui/material/Fab';
+import Chip from '@mui/material/Chip';
+import MenuIcon from '@mui/icons-material/Menu';
 import { ThemeContext } from "styled-components";
 import AddButton from "../../components/AddButton";
+import ClearIcon from '@mui/icons-material/Clear';
 import { titleRequired } from "../../utils/toast";
 import { ToastContainer } from "react-toastify";
+
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
 
 interface Props {
   toggleTheme(): void;
@@ -51,10 +64,11 @@ const PageNotes = ({ toggleTheme }: Props) => {
     color: " "
   });
   const [noteList, setNoteList] = useState<INoteContent[]>([]);
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [searchInput, setSearchInput] = useState<string>("");
+  const [showModal, setShowModal] = useState(false);
+  const [showAddInput, setShowAddInput] = useState(false)
+  const [searchInput, setSearchInput] = useState("");
   const [noteToEdit, setNoteToEdit] = useState<INoteContent | null>(null);
-
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   //filtro de notas
   const filteredNotes =
     searchInput.length > 0
@@ -147,6 +161,7 @@ const PageNotes = ({ toggleTheme }: Props) => {
       if (note.title == " ") {
         titleRequired()
       } else {
+
         setTimeout(() => colorNote(), 500)
 
         console.log(note)
@@ -154,6 +169,8 @@ const PageNotes = ({ toggleTheme }: Props) => {
         await createNote(note);
 
         await fecthData();
+
+        setShowAddInput(false)
       }
 
       setNote({ id: note.id, title: " ", content: " ", color: " " });
@@ -170,18 +187,51 @@ const PageNotes = ({ toggleTheme }: Props) => {
 
     navigate("/login")
   }
+
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
   return (
     <App>
-      <ToastContainer/>
-      <Content>
-        <Header>
-          <Title>
-            <h1>Notes</h1>
-          </Title>
-          <Stack direction="row" spacing={2}
-            sx={{ width: "5%", display: "flex", justifyContent: "flex-end", alignItems: "center", paddingRigth: "30px" }}>
-            <Button onClick={() => logOut()}>Sair</Button>
+      <ToastContainer />
+      <Search>
+        <Title>
+          <h1>Notes</h1>
+        </Title>
+        <Box sx={{ flexGrow: 0, margin: "10px" }}>
+          <Tooltip title="Open settings">
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <MenuIcon fontSize="large" sx={{ margin: "10px", color: `#e9ecef` }} />
+            </IconButton>
+          </Tooltip>
+          <Menu
+            sx={{ mt: '35px', textAlign: "center" }}
+            id="menu-appbar"
+            anchorEl={anchorElUser}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right'
+            }}
+            open={Boolean(anchorElUser)}
+            onClose={handleCloseUserMenu}
+          >
+
+            <MenuItem sx={{ margin: "10px" }} onClick={() => logOut()}>
+              <Typography textAlign="center">Sair</Typography>
+            </MenuItem>
+
             <Switch
+
               onChange={() => toggleTheme()}
               checked={title === 'dark'}
               checkedIcon={false}
@@ -190,13 +240,32 @@ const PageNotes = ({ toggleTheme }: Props) => {
               width={40}
               handleDiameter={15}
             />
-          </Stack>
-        </Header>
+
+          </Menu>
+        </Box>
+
+        <input
+          type="text"
+          placeholder="Search your notes"
+          onChange={(e) => setSearchInput(e.target.value)}
+        />
+        <Avatar alt="João" src="../../images/profile-pic.png" sx={{ margin: "10px" }} />
+
+      </Search>
+      <Content>
         <div>
           <form onSubmit={handleSubmit}>
             <TextField
               id="outlined-controlled"
-              sx={{ margin: "10px", background: `${colors.inputBackground}`, borderRadius: "10px" }}
+              sx={{
+                margin: "10px", background: `${colors.background}`, borderRadius: "10px",
+                color: `${colors.text}`
+              }}
+              inputProps={{
+                style: {
+                  color: `${colors.text}`,
+                },
+              }}
               autoComplete="off"
               required
               label="Título"
@@ -208,9 +277,16 @@ const PageNotes = ({ toggleTheme }: Props) => {
             />
             <TextField
               id="outlined-controlled"
-              sx={{ margin: "10px", background: `${colors.inputBackground}`, borderRadius: "10px" }}
+              sx={{
+                margin: "10px", background: `${colors.background}`, borderRadius: "10px",
+                color: `${colors.text}`
+              }}
+              inputProps={{
+                style: {
+                  color: `${colors.text}`,
+                },
+              }}
               autoComplete="off"
-              required
               label="Conteúdo"
               InputLabelProps={{
                 sx: { color: `${colors.text}` }
@@ -223,21 +299,69 @@ const PageNotes = ({ toggleTheme }: Props) => {
         </div>
       </Content>
 
-      {noteList.length > 0 && (
-        <Search>
-          <TextField
-            id="outlined-controlled"
-            sx={{
-              margin: "10px", maxWidth: "30em", minWidth: "20em",
-              boxShadow: "2px 3px 5px rgba(0, 0, 0, 0.40), 0px 16px 10px -10px rgba(0, 0, 0, 0.28), 0px 0px 30px -5px rgba(0, 0, 0, 0.28)",
-              borderRadius: "10px", border: "none", background: `${colors.inputBackground}`
-            }}
-            label="Buscar"
-            autoComplete="off"
-            onChange={(e) => setSearchInput(e.target.value)}
-          />
-        </Search>
+      {showAddInput && (
+        <AddNoteMobile>
+
+          <form onSubmit={handleSubmit}>
+            <div id="cancel-mobile-btn">
+              <IconButton onClick={() => setShowAddInput(false)}>
+                <Fab size="small" color="error">
+                  <ClearIcon />
+                </Fab>
+              </IconButton>
+            </div>
+            <TextField
+              id="title-add-mobile"
+              sx={{
+                margin: "10px", background: `${colors.background}`, borderRadius: "10px",
+                color: `${colors.text}`
+              }}
+              inputProps={{
+                style: {
+                  color: `${colors.text}`,
+                },
+              }}
+              autoComplete="off"
+              required
+              label="Título"
+              InputLabelProps={{
+                sx: { color: `${colors.text}` }
+              }}
+              value={note.title}
+              onChange={(e) => setNote({ ...note, title: e.target.value })}
+            />
+            <TextField
+              id="content-add-mobile"
+              sx={{
+                margin: "10px", background: `${colors.background}`, borderRadius: "10px",
+                color: `${colors.text}`
+              }}
+              inputProps={{
+                style: {
+                  color: `${colors.text}`
+                },
+              }}
+              autoComplete="off"
+              required
+              label="Conteúdo"
+              InputLabelProps={{
+                sx: { color: `${colors.text}` }
+              }}
+              value={note.content}
+              onChange={(e) => setNote({ ...note, content: e.target.value })}
+            />
+            <div id="create-mobile-note">
+              <IconButton onClick={() => handleSubmit()}>
+                <Fab size="small" color="success">
+                  <CheckIcon />
+                </Fab>
+              </IconButton>
+            </div>
+          </form>
+        </AddNoteMobile>
+
       )}
+
       <div>
         {showModal && noteToEdit && (
           <Modal
@@ -247,7 +371,7 @@ const PageNotes = ({ toggleTheme }: Props) => {
           />
         )}
         <Result>
-          {!showModal &&
+          {!showModal && !showAddInput && (
             notesToShow.map((note, index) => (
               <NoteCard
                 key={index}
@@ -256,16 +380,16 @@ const PageNotes = ({ toggleTheme }: Props) => {
                 onDelete={handleDelete}
                 onEdit={handleEdit}
               />
-            ))}
+            )))}
         </Result>
       </div>
       <Footer>
-        <CheckBoxIcon fontSize="small" sx={{color: '#e9ecef'}}/>
-        <CollectionsOutlinedIcon fontSize="small" sx={{color: '#e9ecef'}}/>
+        <CheckBoxIcon fontSize="small" sx={{ color: '#e9ecef' }} />
+        <CollectionsOutlinedIcon fontSize="small" sx={{ color: '#e9ecef' }} />
 
         <NavBar>
           <Button
-            onClick={() => handleSubmit()}
+            onClick={() => setShowAddInput(true)}
             sx={{
               background: '#3A3A3A',
               border: `3px solid ${colors.background}`, borderRadius: "100px", height: "58px", width: "58px",
@@ -278,8 +402,8 @@ const PageNotes = ({ toggleTheme }: Props) => {
           </Button>
         </NavBar>
 
-        <MicNoneRoundedIcon fontSize="small" sx={{color: '#e9ecef'}}/>
-        <ModeIcon fontSize="small" sx={{color: '#e9ecef'}}/>
+        <MicNoneRoundedIcon fontSize="small" sx={{ color: '#e9ecef' }} />
+        <ModeIcon fontSize="small" sx={{ color: '#e9ecef' }} />
       </Footer>
     </App>
   );

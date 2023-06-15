@@ -10,6 +10,7 @@ declare module 'styled-components' {
             background:string;
             inputBackground: string;
             text: string;
+            white: string
         }
     }
 }

@@ -7,6 +7,7 @@ export default {
 
         background:'#212529',
         inputBackground: '#495057',
-        text: '#fff'
+        text: '#f8f9fa',
+        white: '#f8f9fa'
     }
 }

@@ -17,7 +17,7 @@ interface Component {
 
 function App() {
 
-  const [theme, setTheme] = useState(light)
+  const [theme, setTheme] = useState(dark)
 
   const toggleTheme = () => {
     setTheme(theme.title === 'light' ? dark : light);

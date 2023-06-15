@@ -3,6 +3,8 @@ import IconButton from "@mui/material/IconButton";
 import { ThemeContext } from "styled-components";
 import CheckIcon from "@mui/icons-material/Check";
 import CancelIcon from "@mui/icons-material/Cancel";
+import ClearIcon from '@mui/icons-material/Clear';
+import Fab from '@mui/material/Fab';
 import { Form, Main } from "./stylesModal";
 
 import { useContext, useEffect, useState } from "react";
@@ -34,6 +36,12 @@ const Modal = ({ note, onClose, submit }: Props) => {
     <Main>
       <div className="title">
         <h1>Editando ...</h1>
+        <IconButton onClick={() => onClose()}>
+          <Fab size="small" color="error">
+            <ClearIcon />
+          </Fab>
+        </IconButton>
+
       </div>
       <div className="content">
         <Form>
@@ -44,6 +52,11 @@ const Modal = ({ note, onClose, submit }: Props) => {
             sx={{ margin: "10px", background: `${colors.inputBackground}`, borderRadius: "10px" }}
             InputLabelProps={{
               sx: { color: `${colors.text}` }
+            }}
+            inputProps={{
+              style: {
+                color: `${colors.text}`,
+              },
             }}
             onChange={(e) =>
               setNoteToEdit((prevNote: any) => ({
@@ -60,6 +73,11 @@ const Modal = ({ note, onClose, submit }: Props) => {
             InputLabelProps={{
               sx: { color: `${colors.text}` }
             }}
+            inputProps={{
+              style: {
+                color: `${colors.text}`,
+              },
+            }}
             onChange={(e) =>
               setNoteToEdit((prevNote: any) => ({
                 ...prevNote,
@@ -68,15 +86,10 @@ const Modal = ({ note, onClose, submit }: Props) => {
             }
           />
           <div className="buttons">
-            <IconButton>
-              <CheckIcon
-                color="primary"
-                type="submit"
-                onClick={() => handleSubmitClick()}
-              />
-            </IconButton>
-            <IconButton onClick={() => onClose()}>
-              <CancelIcon color="warning" />
+            <IconButton onClick={() => handleSubmitClick()}>
+              <Fab size="small" color="success">
+                <CheckIcon />
+              </Fab>
             </IconButton>
           </div>
         </Form>

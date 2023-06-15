@@ -13,8 +13,18 @@ export const App = styled.div`
 export const Title = styled.div`
 
     text-align: left;
-    padding-left: 30px;
-    width: 110%;
+    font-size: small;
+    display: flex;
+    justify-content: center;
+    border-right: 1px solid #ccc;
+    color: #f8f9fa;
+    width: 10%;
+    margin: 10px;
+    padding-right: 10px;
+
+    @media only screen and (max-width: 768px){
+        display: none;
+    }
 
 
 `
@@ -36,19 +46,38 @@ export const Content = styled.div`
     text-align: center;
 
     @media only screen and (max-width: 760px) {
+        display: none;
         form{
-            display: flex;
+            display: none;
             margin-top: 20px;
         }
     }
 `
-
 export const Search = styled.div`
     margin: 0 auto;
     text-align: center;
-    margin-bottom: 10px;
-    border-top: 1px solid #ccc;
-    width: 90%;
+    background-color: #3A3A3A;
+    border-radius: 30px;
+    margin: 10px;
+    width: 95%;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    input{
+        width: 80%;
+        height: 38px;
+        background-color: #3A3A3A;
+        color: ${props => props.theme.colors.text};
+        border: none;
+
+        font-size: medium;
+    }
+    input:focus{
+        outline: none;
+    }
 `
 
 export const Result = styled.div`
@@ -104,4 +133,45 @@ export const NavBar = styled.div`
     left: 1;
     bottom: 20px;
     z-index: 100;
+`
+
+export const AddNoteMobile = styled.div`
+
+height: 83.5vh;
+margin: 0 auto;
+display: flex;
+justify-content: center;
+
+#cancel-mobile-btn{
+    display: flex;
+    justify-content: end;
+    margin: 10px;
+}
+
+#create-mobile-note{
+    display: flex;
+    justify-content: center;
+    
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-wrap: wrap;
+    /* border: 1px solid blue; */
+    height: 80%;
+    width: 80%;
+}
+
+#title-add-mobile{
+    /* background-color: ${props=> props.theme.colors.background}; */
+
+}
+
+#cancel-mobile-btn{
+    color: ${props=> props.theme.colors.text};
+}
+
+
 `

@@ -6,7 +6,8 @@ export default {
         secondary: '#495057',
 
         background:'#f8f9fa',
-        inputBackground: '#f8f9fa',
-        text: '#adb5bd'
+        inputBackground: '#495057',
+        text: '#212529',
+        white: '#f8f9fa'
     }
 }
