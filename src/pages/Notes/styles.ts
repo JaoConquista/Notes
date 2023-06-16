@@ -84,9 +84,7 @@ export const Result = styled.div`
     min-width: 40vw;
     max-width: 98vw;
     margin: 0 auto;
-    margin: 10px;
-    padding-bottom: 10px;
-    margin: 0;
+    padding: 8px;
      /*display: flex;
     flex-wrap: wrap;
     margin: 0 auto;

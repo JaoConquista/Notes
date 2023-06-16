@@ -24,6 +24,7 @@ const NoteCard = ({ note, color ,onEdit, onDelete }: NoteCard) => {
     <div>
         <CardStyled>
           <Card
+            onClick={() => onEdit(note)}
             sx={{
               width: "15em", display: "flex",
               flexDirection: "column", justifyContent: "space-between",
@@ -45,12 +46,10 @@ const NoteCard = ({ note, color ,onEdit, onDelete }: NoteCard) => {
                 padding: "0px 0px 10px 0px", textAlign:"center",
               }}
             >
-              <IconButton onClick={() => onEdit(note)}>
-                <EditIcon color="primary" />
+               <IconButton onClick={() => onEdit(note)}>
               </IconButton>
               <IconButton onClick={() => onDelete(note.id)}>
-                <DeleteIcon color="warning" />
-              </IconButton>
+              </IconButton> 
             </CardActions>
           </Card>
         </CardStyled>

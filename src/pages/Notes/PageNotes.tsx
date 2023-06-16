@@ -22,11 +22,9 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import ModeIcon from '@mui/icons-material/Mode';
 import MicNoneRoundedIcon from '@mui/icons-material/MicNoneRounded';
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
-import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import CheckIcon from "@mui/icons-material/Check";
 import Fab from '@mui/material/Fab';
-import Chip from '@mui/material/Chip';
 import MenuIcon from '@mui/icons-material/Menu';
 import { ThemeContext } from "styled-components";
 import AddButton from "../../components/AddButton";
@@ -127,7 +125,12 @@ const PageNotes = ({ toggleTheme }: Props) => {
     setShowModal(true);
   };
 
-  const handleDelete = (id: number) => removeNote(id);
+  const handleDelete = (id: number) => {
+    removeNote(id)
+
+    clearNoteToEdit()
+
+  };
 
   const updateNote = async (note: INoteContent) => {
     await editNote(note);
@@ -199,105 +202,114 @@ const PageNotes = ({ toggleTheme }: Props) => {
   return (
     <App>
       <ToastContainer />
-      <Search>
-        <Title>
-          <h1>Notes</h1>
-        </Title>
-        <Box sx={{ flexGrow: 0, margin: "10px" }}>
-          <Tooltip title="Open settings">
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <MenuIcon fontSize="large" sx={{ margin: "10px", color: `#e9ecef` }} />
-            </IconButton>
-          </Tooltip>
-          <Menu
-            sx={{ mt: '35px', textAlign: "center" }}
-            id="menu-appbar"
-            anchorEl={anchorElUser}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right'
-            }}
-            open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}
-          >
+      {!showModal && (
+        <>
+          <Search>
+            <Title>
+              <h1>Notes</h1>
+            </Title>
+            <Box sx={{ flexGrow: 0, margin: "10px" }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <MenuIcon fontSize="large" sx={{ margin: "10px", color: `#e9ecef` }} />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: '35px', textAlign: "center" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right'
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
 
-            <MenuItem sx={{ margin: "10px" }} onClick={() => logOut()}>
-              <Typography textAlign="center">Sair</Typography>
-            </MenuItem>
+                <MenuItem sx={{ margin: "10px" }} onClick={() => logOut()}>
+                  <Typography textAlign="center">Sair</Typography>
+                </MenuItem>
 
-            <Switch
+                <Switch
 
-              onChange={() => toggleTheme()}
-              checked={title === 'dark'}
-              checkedIcon={false}
-              uncheckedIcon={false}
-              height={10}
-              width={40}
-              handleDiameter={15}
+                  onChange={() => toggleTheme()}
+                  checked={title === 'dark'}
+                  checkedIcon={false}
+                  uncheckedIcon={false}
+                  height={10}
+                  width={40}
+                  handleDiameter={15}
+                />
+
+              </Menu>
+            </Box>
+
+            <input
+              type="text"
+              placeholder="Search your notes"
+              onChange={(e) => setSearchInput(e.target.value)}
             />
+            <Avatar
+              alt="João"
+              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80"
+              sx={{ margin: "10px" }} />
+          </Search>
+          <Content>
+            <div>
+              <form onSubmit={handleSubmit}>
 
-          </Menu>
-        </Box>
+                <TextField
+                  id="outlined-controlled"
+                  sx={{
+                    margin: "10px", background: `${colors.background}`, borderRadius: "10px",
+                    color: `${colors.text}`
+                  }}
+                  inputProps={{
+                    style: {
+                      color: `${colors.text}`,
+                    },
+                  }}
+                  autoComplete="off"
+                  required
+                  label="Título"
+                  InputLabelProps={{
+                    sx: { color: `${colors.text}` }
+                  }}
+                  value={note.title}
+                  onChange={(e) => setNote({ ...note, title: e.target.value })}
+                />
+                <TextField
+                  id="outlined-controlled"
+                  sx={{
+                    margin: "10px", background: `${colors.background}`, borderRadius: "10px",
+                    color: `${colors.text}`
+                  }}
+                  inputProps={{
+                    style: {
+                      color: `${colors.text}`,
+                    },
+                  }}
+                  autoComplete="off"
+                  label="Conteúdo"
+                  InputLabelProps={{
+                    sx: { color: `${colors.text}` }
+                  }}
+                  value={note.content}
+                  onChange={(e) => setNote({ ...note, content: e.target.value })}
+                />
+                <AddButton />
+              </form>
+            </div>
+          </Content>
+        </>
+      )}
 
-        <input
-          type="text"
-          placeholder="Search your notes"
-          onChange={(e) => setSearchInput(e.target.value)}
-        />
-        <Avatar alt="João" src="../../images/profile-pic.png" sx={{ margin: "10px" }} />
 
-      </Search>
-      <Content>
-        <div>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              id="outlined-controlled"
-              sx={{
-                margin: "10px", background: `${colors.background}`, borderRadius: "10px",
-                color: `${colors.text}`
-              }}
-              inputProps={{
-                style: {
-                  color: `${colors.text}`,
-                },
-              }}
-              autoComplete="off"
-              required
-              label="Título"
-              InputLabelProps={{
-                sx: { color: `${colors.text}` }
-              }}
-              value={note.title}
-              onChange={(e) => setNote({ ...note, title: e.target.value })}
-            />
-            <TextField
-              id="outlined-controlled"
-              sx={{
-                margin: "10px", background: `${colors.background}`, borderRadius: "10px",
-                color: `${colors.text}`
-              }}
-              inputProps={{
-                style: {
-                  color: `${colors.text}`,
-                },
-              }}
-              autoComplete="off"
-              label="Conteúdo"
-              InputLabelProps={{
-                sx: { color: `${colors.text}` }
-              }}
-              value={note.content}
-              onChange={(e) => setNote({ ...note, content: e.target.value })}
-            />
-            <AddButton />
-          </form>
-        </div>
-      </Content>
 
       {showAddInput && (
         <AddNoteMobile>
@@ -362,49 +374,53 @@ const PageNotes = ({ toggleTheme }: Props) => {
 
       )}
 
-      <div>
-        {showModal && noteToEdit && (
-          <Modal
-            onClose={() => clearNoteToEdit()}
-            note={noteToEdit}
-            submit={handleModalSubmit}
-          />
-        )}
-        <Result>
-          {!showModal && !showAddInput && (
-            notesToShow.map((note, index) => (
-              <NoteCard
-                key={index}
-                note={note}
-                color={note.color}
-                onDelete={handleDelete}
-                onEdit={handleEdit}
-              />
-            )))}
-        </Result>
-      </div>
-      <Footer>
-        <CheckBoxIcon fontSize="small" sx={{ color: '#e9ecef' }} />
-        <CollectionsOutlinedIcon fontSize="small" sx={{ color: '#e9ecef' }} />
 
-        <NavBar>
-          <Button
-            onClick={() => setShowAddInput(true)}
-            sx={{
-              background: '#3A3A3A',
-              border: `3px solid ${colors.background}`, borderRadius: "100px", height: "58px", width: "58px",
-              display: "flex", justifyContent: "center", position: "relative",
-              zIndex: "1", '&:hover': {
-                background: colors.inputBackground,
-              }
-            }}>
-            <AddIcon fontSize="medium" sx={{ color: "#ccc" }} />
-          </Button>
-        </NavBar>
+      {showModal && noteToEdit && (
+        <Modal
+          onClose={() => clearNoteToEdit()}
+          onDelete={handleDelete}
+          note={noteToEdit}
+          submit={handleModalSubmit}
+        />
+      )}
+      <Result>
+        {!showModal && !showAddInput && (
+          notesToShow.map((note, index) => (
+            <NoteCard
+              key={index}
+              note={note}
+              color={note.color}
+              onDelete={handleDelete}
+              onEdit={handleEdit}
+            />
+          )))}
+      </Result>
 
-        <MicNoneRoundedIcon fontSize="small" sx={{ color: '#e9ecef' }} />
-        <ModeIcon fontSize="small" sx={{ color: '#e9ecef' }} />
-      </Footer>
+      {!showModal && (
+        <Footer>
+          <CheckBoxIcon fontSize="small" sx={{ color: '#e9ecef' }} />
+          <CollectionsOutlinedIcon fontSize="small" sx={{ color: '#e9ecef' }} />
+
+          <NavBar>
+            <Button
+              onClick={() => setShowAddInput(true)}
+              sx={{
+                background: '#3A3A3A',
+                border: `3px solid ${colors.background}`, borderRadius: "100px", height: "58px", width: "58px",
+                display: "flex", justifyContent: "center", position: "relative",
+                zIndex: "1", '&:hover': {
+                  background: colors.inputBackground,
+                }
+              }}>
+              <AddIcon fontSize="medium" sx={{ color: "#ccc" }} />
+            </Button>
+          </NavBar>
+
+          <MicNoneRoundedIcon fontSize="small" sx={{ color: '#e9ecef' }} />
+          <ModeIcon fontSize="small" sx={{ color: '#e9ecef' }} />
+        </Footer>
+      )}
+
     </App>
   );
 };

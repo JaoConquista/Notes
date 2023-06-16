@@ -2,8 +2,7 @@ import styled from "styled-components"
 
 
 export const CardStyled = styled.div`
-    margin: 4px;
-    margin-top:12px;
+    margin-bottom:12px;
     display: flex;
     flex-wrap: wrap;
     word-wrap: break-word;
