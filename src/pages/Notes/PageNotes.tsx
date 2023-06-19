@@ -145,38 +145,20 @@ const PageNotes = ({ toggleTheme }: Props) => {
     await fecthData();
   };
 
-  const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
-    if (e) {
-      e.preventDefault();
+    e.preventDefault();
 
-      setTimeout(() => colorNote(), 500)
+    setTimeout(() => colorNote(), 500)
 
-      console.log(note)
+    console.log(note)
 
-      await createNote(note);
+    await createNote(note);
 
-      setNote({ id: note.id, title: " ", content: " ", color: " ", image: "", tag: "" });
+    setNote({ id: note.id, title: " ", content: " ", color: " ", image: "", tag: "" });
 
-      await fecthData();
-    } else {
-      if (note.title == " ") {
-        titleRequired()
-      } else {
+    await fecthData();
 
-        setTimeout(() => colorNote(), 500)
-
-        console.log(note)
-
-        await createNote(note);
-
-        await fecthData();
-
-        setShowAddInput(false)
-      }
-
-      setNote({ id: note.id, title: " ", content: " ", color: " ", image: "", tag: "" });
-    }
 
   };
 
@@ -235,7 +217,6 @@ const PageNotes = ({ toggleTheme }: Props) => {
                 </MenuItem>
 
                 <Switch
-
                   onChange={() => toggleTheme()}
                   checked={title === 'dark'}
                   checkedIcon={false}
@@ -310,7 +291,7 @@ const PageNotes = ({ toggleTheme }: Props) => {
 
 
 
-      
+
 
 
       {showModal && noteToEdit && (
