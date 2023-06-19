@@ -71,7 +71,7 @@ export const Form = styled.form`
             
         }
 
-        #edit-title{
+        #title{
             width: 75%;
             overflow-y: auto;
             resize: none;
@@ -81,24 +81,24 @@ export const Form = styled.form`
             font-size:25px ;
         }
 
-        #edit-title:focus{
+        #title:focus{
             outline: none;
         }
 
-        #edit-content{
+        #content{
             max-width: 80%;
             overflow-y: auto;
             resize: none;
             color: ${props => props.theme.colors.text};
             background-color: ${props => props.theme.colors.background};
             border: none;
-            font-size: 15px ;
+            font-size: 20px ;
             line-height: 22px;
         }
-        #edit-content:focus{
+        #content:focus{
             outline: none;
         }
-
+        
         #input-image{
             width: 90%;
             overflow-y: auto;
@@ -156,12 +156,12 @@ form{
 }
 
 #title-add-mobile{
-    /* background-color: ${props=> props.theme.colors.background}; */
+    /* background-color: ${props => props.theme.colors.background}; */
 
 }
 
 #cancel-mobile-btn{
-    color: ${props=> props.theme.colors.text};
+    color: ${props => props.theme.colors.text};
 }
 
 
@@ -234,13 +234,12 @@ export const Image = styled.div`
     margin: auto;
 
     img{
-        margin-top: 30px;
-        height: 30%;
-        max-width: 60%;
+        height: 290px;
+        max-width: 340px;
         min-width: 150px;
         border-radius: 30px;
+        margin-top: 120px;
     }
-
-
-
 `
+
+

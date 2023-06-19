@@ -7,7 +7,9 @@ export function postNote(note: INoteContent): Promise<any> {
   return axios.post(urlNotes, {
     title: note.title,
     content: note.content,
-    color: note.color
+    color: note.color,
+    image: note.image,
+    tag: note.tag
   });
 }
 
@@ -34,4 +36,14 @@ export function editNote(note: INoteContent) {
   const editNoteUrl = `${urlNotes}/${note.id}`;
 
   return axios.put(editNoteUrl, note);
+}
+
+export function autoResize(tagId: string) {
+  const textarea: HTMLElement | null = document.getElementById(`${tagId}`);
+  if(textarea != null) {
+    textarea.style.height = "auto";
+    textarea.style.height = textarea.scrollHeight + "px";
+  }else{
+    return
+  }
 }

@@ -1,9 +1,9 @@
 import React from "react";
 import IconButton from "@mui/material/IconButton";
-import styled, { ThemeContext } from "styled-components";
+import { ThemeContext } from "styled-components";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from '@mui/icons-material/Clear';
-import { Form, Main, Image, Footer, Search, Title, Tags } from "./stylesModal";
+import { Form, Main, Image, Footer, Search, Title, Tags } from "./addNote";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
@@ -20,41 +20,82 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import { useContext, useEffect, useState } from "react";
 import { INoteContent } from "../../Interfaces/INote";
-import { autoResize } from "../../services/NoteService";
+import { autoResize, postNote } from "../../services/NoteService"
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
-type Props = {
-  note: INoteContent;
-  onDelete: (id: number) => void;
-  onClose: () => void;
-  submit: (note: INoteContent) => void;
-};
 
-const Modal = ({ note, onClose, onDelete, submit }: Props) => {
-  const [noteToEdit, setNoteToEdit] = useState<INoteContent | null>(null);
+
+const AddNotePage = () => {
+
+  const navigate = useNavigate()
+
+  const colorsList = ["#ebf781", "#a5f5a5", "#f19c9c", "#bab6f3", "#dfb1ec",
+    "#a5f5a5", "#9ceef1", "#dfb1ec", "#ebf781", "#a5f5a5",
+    "#f19c9c", "#dfb1ec"]
+
+  const tags = ["Work", "Dreams", "Food", "Study", "Travel"]
+
+  const [note, setNote] = useState<INoteContent>({
+    id: 0,
+    title: "",
+    content: "",
+    color: "",
+    image: "",
+    tag: ""
+  });
+
+  const [image, setImage] = useState("")
+  const [tag, setTag] = React.useState("");
   const { colors } = useContext(ThemeContext)
 
+  console.log(image)
+
   useEffect(() => {
-    if (note) {
-      setNoteToEdit(note);
-    }
+    setImage(note.image)
+    setTag(note.tag);
   }, [note]);
+
   useEffect(() => {
     autoResize('edit-title')
     autoResize('edit-content')
-  }, [noteToEdit])
+  }, [note])
 
-  const handleSubmitClick = () => {
-    if (noteToEdit === null) return;
+  const colorNote = () => {
+    let randomColor = colorsList[Math.floor(Math.random() * (colorsList.length))]
 
-    submit(noteToEdit);
-  };
+    setNote({ ...note, color: randomColor });
 
-  const [age, setAge] = React.useState('');
+  }
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value);
-  };
+  const createNote = async (note: INoteContent) => {
 
+    try {
+      console.log(note)
+
+      colorNote()
+
+      console.log(note)
+
+      await postNote(note);
+
+      setNote({ id: note.id, title: " ", content: " ", color: "", image: "", tag: "" });
+
+      navigate('/notes')
+
+    } catch (error) {
+
+      return error;
+
+    }
+  }
+
+
+  const handleSubmit = async () => {
+
+    await createNote(note)
+
+  }
   return (
     <Main>
       <Search>
@@ -62,7 +103,8 @@ const Modal = ({ note, onClose, onDelete, submit }: Props) => {
           <h1>Notes</h1>
         </Title>
         <Button
-          onClick={() => handleSubmitClick()}
+          onClick={(e) => handleSubmit()}
+          type="submit"
           sx={{
             background: '#3A3A3A',
             borderRadius: "100px", height: "50px", width: "58px",
@@ -93,15 +135,14 @@ const Modal = ({ note, onClose, onDelete, submit }: Props) => {
                   labelId="demo-simple-select-standard-label"
                   id="demo-simple-select-standard"
                   sx={{ color: `${colors.text}` }}
-                  // value={age}
-                  onChange={handleChange}
+                  value={tag}
+                  onChange={(e) => setNote({ ...note, tag: e.target.value })}
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  {tags.length >= 0 &&(
+                    tags.map((tag) => (
+                      <MenuItem value={tag}>{tag}</MenuItem>
+                    ))
+                  )}
                 </Select>
               </FormControl>
             </div>
@@ -112,46 +153,38 @@ const Modal = ({ note, onClose, onDelete, submit }: Props) => {
           </Tags>
           <div id="title-edit-content">
             <textarea
-              value={noteToEdit?.title}
               autoComplete="off"
-              id="edit-title"
-              onInput={() => autoResize('edit-title')}
-              onChange={(e) =>
-                setNoteToEdit((prevNote: any) => ({
-                  ...prevNote,
-                  title: e.target.value,
-                }))} >
+              id="title"
+              placeholder="Título .."
+              onInput={() => autoResize('title')}
+              onChange={(e) => setNote({ ...note, title: e.target.value })}
+            >
 
             </textarea>
-
             <div id="more">
               <MoreVertIcon fontSize="small" />
             </div>
           </div>
 
           <textarea
-            value={noteToEdit?.content}
             autoComplete="off"
-            id="edit-content"
-            onInput={() => autoResize('edit-content')}
-            onChange={(e) =>
-              setNoteToEdit((prevNote: any) => ({
-                ...prevNote,
-                content: e.target.value,
-              }))}>
+            id="content"
+            onInput={() => autoResize('content')}
+            placeholder="Conteúdo ..."
+            onChange={(e) => setNote({ ...note, content: e.target.value })}
+          />
 
-          </textarea>
           <textarea
             autoComplete="off"
             id="input-image"
             onInput={() => autoResize('input-image')}
-            placeholder="Altere ou Adicione uma imagem aqui :))"
-            onChange={(e) => setNoteToEdit({ ...note, image: e.target.value })}
+            placeholder="Link da sua Imagem se quiser ;)"
+            onChange={(e) => setNote({ ...note, image: e.target.value })}
           />
 
           <Image>
             <div id="image-content">
-              <img src={`${noteToEdit?.image}`} />
+              <img src={`${image}`} />
             </div>
           </Image>
           <div className="buttons">
@@ -161,7 +194,7 @@ const Modal = ({ note, onClose, onDelete, submit }: Props) => {
 
       <div id="footer-position">
         <Footer>
-          <IconButton onClick={() => onClose()}
+          <IconButton onClick={() => navigate('/notes')}
             sx={{
               background: '#3A3A3A',
               borderRadius: "100px", height: "50px", width: "58px",
@@ -172,17 +205,6 @@ const Modal = ({ note, onClose, onDelete, submit }: Props) => {
             }}>
             <ClearIcon sx={{ color: `#ccc` }} />
           </IconButton>
-          <IconButton onClick={() => onDelete(note.id)}
-            sx={{
-              background: '#3A3A3A',
-              borderRadius: "100px", height: "50px", width: "58px",
-              display: "flex", justifyContent: "center", position: "relative",
-              zIndex: "1", '&:hover': {
-                background: colors.inputBackground,
-              }
-            }}>
-            <DeleteIcon sx={{ color: `#ccc}` }} />
-          </IconButton>
         </Footer>
       </div>
 
@@ -190,4 +212,4 @@ const Modal = ({ note, onClose, onDelete, submit }: Props) => {
   );
 };
 
-export default Modal;
+export default AddNotePage;

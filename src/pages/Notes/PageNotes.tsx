@@ -8,6 +8,7 @@ import {
   getNote,
   postNote,
   editNote,
+  autoResize
 } from "../../services/NoteService";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +16,7 @@ import Switch from 'react-switch'
 
 //Styles
 import TextField from "@mui/material/TextField";
-import { App, Content, Result, Search, Title, Footer, NavBar, AddNoteMobile } from "./styles"
+import { App, Content, Result, Search, Title, Footer, NavBar, AddNoteMobile, Form, Tags, Image } from "./styles"
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
@@ -23,14 +24,12 @@ import ModeIcon from '@mui/icons-material/Mode';
 import MicNoneRoundedIcon from '@mui/icons-material/MicNoneRounded';
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 import Avatar from '@mui/material/Avatar';
-import CheckIcon from "@mui/icons-material/Check";
-import Fab from '@mui/material/Fab';
 import MenuIcon from '@mui/icons-material/Menu';
 import { ThemeContext } from "styled-components";
 import AddButton from "../../components/AddButton";
-import ClearIcon from '@mui/icons-material/Clear';
 import { titleRequired } from "../../utils/toast";
 import { ToastContainer } from "react-toastify";
+
 
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -49,17 +48,19 @@ const PageNotes = ({ toggleTheme }: Props) => {
 
   const navigate = useNavigate()
 
+  const { colors, title } = useContext(ThemeContext);
+
   const colorsList = ["#ebf781", "#a5f5a5", "#f19c9c", "#bab6f3", "#dfb1ec",
     "#a5f5a5", "#9ceef1", "#dfb1ec", "#ebf781", "#a5f5a5",
     "#f19c9c", "#dfb1ec"]
-
-  const { colors, title } = useContext(ThemeContext);
 
   const [note, setNote] = useState<INoteContent>({
     id: 0,
     title: " ",
     content: " ",
-    color: " "
+    color: " ",
+    image: "",
+    tag: ""
   });
   const [noteList, setNoteList] = useState<INoteContent[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -107,11 +108,9 @@ const PageNotes = ({ toggleTheme }: Props) => {
   const colorNote = () => {
     let randomColor = colorsList[Math.floor(Math.random() * (colorsList.length))]
 
-    setNote(prevNote => ({
-      ...prevNote,
-      color: randomColor
-    }));
+    setNote({ ...note, color: randomColor });
   }
+
 
   const fecthData = async () => {
     const data = await getNote();
@@ -157,9 +156,9 @@ const PageNotes = ({ toggleTheme }: Props) => {
 
       await createNote(note);
 
-      await fecthData();
+      setNote({ id: note.id, title: " ", content: " ", color: " ", image: "", tag: "" });
 
-      setNote({ id: note.id, title: " ", content: " ", color: " " });
+      await fecthData();
     } else {
       if (note.title == " ") {
         titleRequired()
@@ -176,7 +175,7 @@ const PageNotes = ({ toggleTheme }: Props) => {
         setShowAddInput(false)
       }
 
-      setNote({ id: note.id, title: " ", content: " ", color: " " });
+      setNote({ id: note.id, title: " ", content: " ", color: " ", image: "", tag: "" });
     }
 
   };
@@ -311,68 +310,7 @@ const PageNotes = ({ toggleTheme }: Props) => {
 
 
 
-      {showAddInput && (
-        <AddNoteMobile>
-
-          <form onSubmit={handleSubmit}>
-            <div id="cancel-mobile-btn">
-              <IconButton onClick={() => setShowAddInput(false)}>
-                <Fab size="small" color="error">
-                  <ClearIcon />
-                </Fab>
-              </IconButton>
-            </div>
-            <TextField
-              id="title-add-mobile"
-              sx={{
-                margin: "10px", background: `${colors.background}`, borderRadius: "10px",
-                color: `${colors.text}`
-              }}
-              inputProps={{
-                style: {
-                  color: `${colors.text}`,
-                },
-              }}
-              autoComplete="off"
-              required
-              label="Título"
-              InputLabelProps={{
-                sx: { color: `${colors.text}` }
-              }}
-              value={note.title}
-              onChange={(e) => setNote({ ...note, title: e.target.value })}
-            />
-            <TextField
-              id="content-add-mobile"
-              sx={{
-                margin: "10px", background: `${colors.background}`, borderRadius: "10px",
-                color: `${colors.text}`
-              }}
-              inputProps={{
-                style: {
-                  color: `${colors.text}`
-                },
-              }}
-              autoComplete="off"
-              required
-              label="Conteúdo"
-              InputLabelProps={{
-                sx: { color: `${colors.text}` }
-              }}
-              value={note.content}
-              onChange={(e) => setNote({ ...note, content: e.target.value })}
-            />
-            <div id="create-mobile-note">
-              <IconButton onClick={() => handleSubmit()}>
-                <Fab size="small" color="success">
-                  <CheckIcon />
-                </Fab>
-              </IconButton>
-            </div>
-          </form>
-        </AddNoteMobile>
-
-      )}
+      
 
 
       {showModal && noteToEdit && (
@@ -384,13 +322,12 @@ const PageNotes = ({ toggleTheme }: Props) => {
         />
       )}
       <Result>
-        {!showModal && !showAddInput && (
+        {!showModal && (
           notesToShow.map((note, index) => (
             <NoteCard
               key={index}
               note={note}
               color={note.color}
-              onDelete={handleDelete}
               onEdit={handleEdit}
             />
           )))}
@@ -403,7 +340,7 @@ const PageNotes = ({ toggleTheme }: Props) => {
 
           <NavBar>
             <Button
-              onClick={() => setShowAddInput(true)}
+              onClick={() => navigate('/notes/addNote')}
               sx={{
                 background: '#3A3A3A',
                 border: `3px solid ${colors.background}`, borderRadius: "100px", height: "58px", width: "58px",

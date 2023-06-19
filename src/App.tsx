@@ -7,6 +7,7 @@ import Login from "./pages/Login/Login";
 import CreateAccount from "./pages/CreateAccount/CreateAccount";
 import { useState } from "react";
 import GlobalStyle from "../global"
+import AddNotePage from "../src/pages/AddNote/AddNotePage"
 
 
 interface Component {
@@ -46,7 +47,8 @@ function App() {
             <Routes>
               <Route path="/" element={<CreateAccount />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/notes" element={<AuthenticatedRoute component={<PageNotes toggleTheme={toggleTheme} />} />} />
+              <Route path="/notes" element={<AuthenticatedRoute component={<PageNotes toggleTheme={toggleTheme} />} />}/>
+              <Route path="/notes/addNote" element={<AuthenticatedRoute component={<AddNotePage/>} />}/>
             </Routes>
           </BrowserRouter>
         </ThemeProvider>

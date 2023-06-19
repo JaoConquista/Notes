@@ -102,10 +102,7 @@ export const Result = styled.div`
 `
 
 export const Footer = styled.div`
-
-@media only screen and (max-width: 1500px) {
-    display: none;
-    }
+display: none;
 
 @media only screen and (max-width: 768px) {
     background:  #3A3A3A;
@@ -152,15 +149,14 @@ justify-content: center;
     
 }
 
-form{
+/* form{
     display: flex;
     flex-direction: column;
     justify-content: center;
     flex-wrap: wrap;
-    /* border: 1px solid blue; */
+    /* border: 1px solid blue;
     height: 80%;
-    width: 80%;
-}
+    width: 80%; */
 
 #title-add-mobile{
     /* background-color: ${props=> props.theme.colors.background}; */
@@ -170,6 +166,99 @@ form{
 #cancel-mobile-btn{
     color: ${props=> props.theme.colors.text};
 }
+`
+
+
+export const Form = styled.form`
+        margin-left: 10px;
+        display: flex;
+        max-width: 100%;
+        min-width: 30%;
+        flex-direction: column;
+        justify-content: center;
+        flex-wrap: wrap;
+
+        #title-edit-content{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            #more{
+                margin-bottom: 26px;
+                margin-right: 10px;
+            }
+
+        }
+        textarea{
+            margin-top: 12px;
+            
+        }
+
+        #edit-title{
+            width: 75%;
+            overflow-y: auto;
+            resize: none;
+            color: ${props => props.theme.colors.text};
+            background-color: ${props => props.theme.colors.background};
+            border: none;
+            font-size:25px ;
+        }
+
+        #edit-title:focus{
+            outline: none;
+        }
+
+        #edit-content{
+            max-width: 80%;
+            overflow-y: auto;
+            resize: none;
+            color: ${props => props.theme.colors.text};
+            background-color: ${props => props.theme.colors.background};
+            border: none;
+            font-size: 15px ;
+            line-height: 22px;
+        }
+        #edit-content:focus{
+            outline: none;
+        }
+   
+
+`
+
+export const Tags = styled.div`
+
+    /* border: 1px solid #fff; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+
+    #select-tags{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #items{
+        display: flex;
+        justify-content: space-between;
+        width: 55px;
+        margin-right: 10px;
+    }
+
+`
+
+export const Image = styled.div`
+    margin: 25px;
+
+    img{
+        height: 290px;
+        max-width: 340px;
+        min-width: 150px;
+        border-radius: 30px;
+    }
+
 
 
 `
