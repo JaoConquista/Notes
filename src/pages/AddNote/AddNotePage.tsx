@@ -24,8 +24,6 @@ import { autoResize, postNote } from "../../services/NoteService"
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-
-
 const AddNotePage = () => {
 
   const navigate = useNavigate()
@@ -194,7 +192,7 @@ const AddNotePage = () => {
 
       <div id="footer-position">
         <Footer>
-          <IconButton onClick={() => navigate('/notes')}
+          <IconButton onClick={() => navigate("/notes")}
             sx={{
               background: '#3A3A3A',
               borderRadius: "100px", height: "50px", width: "58px",

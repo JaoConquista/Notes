@@ -11,6 +11,9 @@ declare module 'styled-components' {
             inputBackground: string;
             text: string;
             white: string
+
+            buttonBackGround: string,
+            buttonText:string,
         }
     }
 }

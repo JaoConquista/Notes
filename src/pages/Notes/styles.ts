@@ -225,28 +225,43 @@ export const Form = styled.form`
 
 `
 
-export const Tags = styled.div`
+export const TagsContent = styled.div`
+  display: flex;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  margin: 12px 0px 10px 0px ;
 
-    /* border: 1px solid #fff; */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin: 0 auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
-    #select-tags{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+  #tag-btn{
+    width: 60px;
+    height: 35px;
+    font-size: 0.8rem;
+    border-radius: 10px;
+    margin-left: 10px;
+    margin-right: 3px;
 
-    #items{
-        display: flex;
-        justify-content: space-between;
-        width: 55px;
-        margin-right: 10px;
-    }
+    background: ${props => props.theme.colors.background};
+    color: ${props => props.theme.colors.secondary};
+    border: 1px solid ${props => props.theme.colors.secondary};
+  }
 
+  #tag-btn-selected{
+    width: 60px;
+    height: 35px;
+    font-size: 0.8rem;
+    border-radius: 10px;
+    margin-left: 10px;
+    margin-right: 3px;
+
+    background: ${props => props.theme.colors.buttonBackGround};
+    color: ${props => props.theme.colors.buttonText};
+    border: 1px solid ${props => props.theme.colors.buttonText};
+  }
 `
 
 export const Image = styled.div`

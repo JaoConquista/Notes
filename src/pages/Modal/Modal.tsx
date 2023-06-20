@@ -1,6 +1,6 @@
 import React from "react";
 import IconButton from "@mui/material/IconButton";
-import styled, { ThemeContext } from "styled-components";
+import { ThemeContext } from "styled-components";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from '@mui/icons-material/Clear';
 import { Form, Main, Image, Footer, Search, Title, Tags } from "./stylesModal";
@@ -30,8 +30,12 @@ type Props = {
 };
 
 const Modal = ({ note, onClose, onDelete, submit }: Props) => {
+
   const [noteToEdit, setNoteToEdit] = useState<INoteContent | null>(null);
+
   const { colors } = useContext(ThemeContext)
+
+  const tags = ["Work", "Dreams", "Food", "Study", "Travel"]
 
   useEffect(() => {
     if (note) {
@@ -78,7 +82,7 @@ const Modal = ({ note, onClose, onDelete, submit }: Props) => {
 
       <div className="content">
         <Form>
-          <Tags>
+        <Tags>
             <div id="select-tags">
               <BookmarkBorderOutlinedIcon />
               <FormControl variant="outlined" sx={{
@@ -93,15 +97,14 @@ const Modal = ({ note, onClose, onDelete, submit }: Props) => {
                   labelId="demo-simple-select-standard-label"
                   id="demo-simple-select-standard"
                   sx={{ color: `${colors.text}` }}
-                  // value={age}
-                  onChange={handleChange}
+                  value={note?.tag}
+                  onChange={(e) => setNoteToEdit({ ...note, tag: e.target.value })}
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  {tags.length >= 0 &&(
+                    tags.map((tag) => (
+                      <MenuItem value={tag}>{tag}</MenuItem>
+                    ))
+                  )}
                 </Select>
               </FormControl>
             </div>

@@ -11,12 +11,12 @@ import {
   autoResize
 } from "../../services/NoteService";
 import { useAuth } from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import Switch from 'react-switch'
 
 //Styles
 import TextField from "@mui/material/TextField";
-import { App, Content, Result, Search, Title, Footer, NavBar, AddNoteMobile, Form, Tags, Image } from "./styles"
+import { App, Content, Result, Search, Title, Footer, NavBar, TagsContent } from "./styles"
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
@@ -27,7 +27,6 @@ import Avatar from '@mui/material/Avatar';
 import MenuIcon from '@mui/icons-material/Menu';
 import { ThemeContext } from "styled-components";
 import AddButton from "../../components/AddButton";
-import { titleRequired } from "../../utils/toast";
 import { ToastContainer } from "react-toastify";
 
 
@@ -50,6 +49,8 @@ const PageNotes = ({ toggleTheme }: Props) => {
 
   const { colors, title } = useContext(ThemeContext);
 
+  const [tags, setTag] = useState(["Work", "Dreams", "Travel", "Food", "Study"])
+
   const colorsList = ["#ebf781", "#a5f5a5", "#f19c9c", "#bab6f3", "#dfb1ec",
     "#a5f5a5", "#9ceef1", "#dfb1ec", "#ebf781", "#a5f5a5",
     "#f19c9c", "#dfb1ec"]
@@ -64,10 +65,14 @@ const PageNotes = ({ toggleTheme }: Props) => {
   });
   const [noteList, setNoteList] = useState<INoteContent[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [showAddInput, setShowAddInput] = useState(false)
+  const [showAddInput, setShowAddInput] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [noteToEdit, setNoteToEdit] = useState<INoteContent | null>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [tagSelected, setTagSelected] = useState("");
+
+  const [isSelected, setIsSelected] = useState(false);
+
   //filtro de notas
   const filteredNotes =
     searchInput.length > 0
@@ -77,6 +82,14 @@ const PageNotes = ({ toggleTheme }: Props) => {
           note.content.includes(searchInput)
       )
       : [];
+  //filtro de tags
+  const filteredTags =
+    tagSelected != "" ? (
+      noteList.filter(
+        (note) => note.tag == (tagSelected)
+      )
+    ) : [];
+  console.log(filteredTags)
 
   useEffect(() => {
     fecthData();
@@ -84,6 +97,7 @@ const PageNotes = ({ toggleTheme }: Props) => {
 
 
   const notesToShow = searchInput.length > 0 ? filteredNotes : noteList;
+  const tagsToShow = tagSelected.length > 0 ? filteredTags : noteList;
 
   const removeNote = async (id: number) => {
     await deleteNote(id);
@@ -180,6 +194,16 @@ const PageNotes = ({ toggleTheme }: Props) => {
     setAnchorElUser(null);
   };
 
+  const onClose = () => {
+    setShowAddInput(false)
+  }
+
+
+  const handleTagClick = (tag: string) => {
+    setIsSelected(true);
+
+    setTagSelected(tag)
+  }
   return (
     <App>
       <ToastContainer />
@@ -239,6 +263,27 @@ const PageNotes = ({ toggleTheme }: Props) => {
               src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80"
               sx={{ margin: "10px" }} />
           </Search>
+          <TagsContent>
+            <div className="tag">
+              <button
+                id={tagSelected === "" ? 'tag-btn-selected' : 'tag-btn'}
+                onClick={() => handleTagClick('')}
+              >
+                All({noteList.length})
+              </button>
+            </div>
+            {tags.length !== 0 && (
+              tags.map((tag) => (
+                <div className="tag" key={tag}>
+                  <button id={tagSelected === tag ? 'tag-btn-selected' : 'tag-btn'} onClick={() => handleTagClick(tag)}>
+
+                    {tag}
+
+                  </button>
+                </div>
+              ))
+            )}
+          </TagsContent>
           <Content>
             <div>
               <form onSubmit={handleSubmit}>
@@ -289,11 +334,6 @@ const PageNotes = ({ toggleTheme }: Props) => {
         </>
       )}
 
-
-
-
-
-
       {showModal && noteToEdit && (
         <Modal
           onClose={() => clearNoteToEdit()}
@@ -303,15 +343,27 @@ const PageNotes = ({ toggleTheme }: Props) => {
         />
       )}
       <Result>
-        {!showModal && (
-          notesToShow.map((note, index) => (
+        {filteredTags.length > 0 ? (
+          tagsToShow.map((note, index) => (
             <NoteCard
               key={index}
               note={note}
               color={note.color}
               onEdit={handleEdit}
             />
-          )))}
+          ))
+        ) : (
+          !showModal && (
+            notesToShow.map((note, index) => (
+              <NoteCard
+                key={index}
+                note={note}
+                color={note.color}
+                onEdit={handleEdit}
+              />
+            ))
+          )
+        )}
       </Result>
 
       {!showModal && (
@@ -321,7 +373,7 @@ const PageNotes = ({ toggleTheme }: Props) => {
 
           <NavBar>
             <Button
-              onClick={() => navigate('/notes/addNote')}
+              onClick={() => navigate("/notes/addNote")}
               sx={{
                 background: '#3A3A3A',
                 border: `3px solid ${colors.background}`, borderRadius: "100px", height: "58px", width: "58px",
@@ -338,7 +390,6 @@ const PageNotes = ({ toggleTheme }: Props) => {
           <ModeIcon fontSize="small" sx={{ color: '#e9ecef' }} />
         </Footer>
       )}
-
     </App>
   );
 };

@@ -24,6 +24,7 @@ function App() {
     setTheme(theme.title === 'light' ? dark : light);
     console.log(theme)
   }
+  
   const AuthenticatedRoute = ({ component }: Component) => {
 
     if (localStorage.getItem("auth") === "true") {
