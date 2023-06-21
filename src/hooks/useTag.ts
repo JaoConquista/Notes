@@ -1,14 +1,8 @@
-import {useEffect, useState} from 'react'
+import { useEffect } from 'react'
 
-export function useTag(tag: string) {
-    const [tags, setTags] = useState<[] | string>([])
-
-    setTags(tag)
-
+export function useTag(tags: string[]) {
     useEffect(() => {
-
-        localStorage.setItem("tags", `${tags}`)
-
+        localStorage.setItem("tags", JSON.stringify(tags))
     }, [tags])
 
 }

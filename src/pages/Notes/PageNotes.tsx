@@ -6,16 +6,14 @@ import Modal from "../Modal/Modal";
 import {
   deleteNote,
   getNote,
-  postNote,
   editNote,
-  autoResize
 } from "../../services/NoteService";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate, Navigate } from "react-router-dom";
 import Switch from 'react-switch'
+import { useTag } from "../../hooks/useTag";
 
 //Styles
-import TextField from "@mui/material/TextField";
 import { App, Content, Result, Search, Title, Footer, NavBar, TagsContent } from "./styles"
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
@@ -26,7 +24,6 @@ import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 import Avatar from '@mui/material/Avatar';
 import MenuIcon from '@mui/icons-material/Menu';
 import { ThemeContext } from "styled-components";
-import AddButton from "../../components/AddButton";
 import { ToastContainer } from "react-toastify";
 
 
@@ -39,9 +36,10 @@ import MenuItem from '@mui/material/MenuItem';
 
 interface Props {
   toggleTheme(): void;
+  tags: string[]
 }
 
-const PageNotes = ({ toggleTheme }: Props) => {
+const PageNotes = ({ toggleTheme, tags }: Props) => {
   //Qual a melhor forma de inserir valores em um state de objetos ?
   const { logout } = useAuth()
 
@@ -49,27 +47,12 @@ const PageNotes = ({ toggleTheme }: Props) => {
 
   const { colors, title } = useContext(ThemeContext);
 
-  const [tags, setTag] = useState(["Work", "Dreams", "Travel", "Food", "Study"])
-
-  const colorsList = ["#ebf781", "#a5f5a5", "#f19c9c", "#bab6f3", "#dfb1ec",
-    "#a5f5a5", "#9ceef1", "#dfb1ec", "#ebf781", "#a5f5a5",
-    "#f19c9c", "#dfb1ec"]
-
-  const [note, setNote] = useState<INoteContent>({
-    id: 0,
-    title: " ",
-    content: " ",
-    color: " ",
-    image: "",
-    tag: ""
-  });
   const [noteList, setNoteList] = useState<INoteContent[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [showAddInput, setShowAddInput] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [noteToEdit, setNoteToEdit] = useState<INoteContent | null>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-  const [tagSelected, setTagSelected] = useState("");
+  const [tagSelected, setTagSelected] = useState("All");
 
   const [isSelected, setIsSelected] = useState(false);
 
@@ -84,16 +67,17 @@ const PageNotes = ({ toggleTheme }: Props) => {
       : [];
   //filtro de tags
   const filteredTags =
-    tagSelected != "" ? (
+    tagSelected !== "All" ? (
       noteList.filter(
         (note) => note.tag == (tagSelected)
       )
     ) : [];
-  console.log(filteredTags)
 
   useEffect(() => {
     fecthData();
   }, []);
+
+
 
 
   const notesToShow = searchInput.length > 0 ? filteredNotes : noteList;
@@ -106,24 +90,6 @@ const PageNotes = ({ toggleTheme }: Props) => {
 
     await fecthData();
   };
-
-  const createNote = async (note: INoteContent) => {
-    try {
-
-      await postNote(note);
-
-      await fecthData();
-
-    } catch (error) {
-      return error;
-    }
-  };
-
-  const colorNote = () => {
-    let randomColor = colorsList[Math.floor(Math.random() * (colorsList.length))]
-
-    setNote({ ...note, color: randomColor });
-  }
 
 
   const fecthData = async () => {
@@ -159,23 +125,6 @@ const PageNotes = ({ toggleTheme }: Props) => {
     await fecthData();
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-
-    e.preventDefault();
-
-    setTimeout(() => colorNote(), 500)
-
-    console.log(note)
-
-    await createNote(note);
-
-    setNote({ id: note.id, title: " ", content: " ", color: " ", image: "", tag: "" });
-
-    await fecthData();
-
-
-  };
-
   const clearNoteToEdit = () => {
     setShowModal(false);
   };
@@ -194,9 +143,7 @@ const PageNotes = ({ toggleTheme }: Props) => {
     setAnchorElUser(null);
   };
 
-  const onClose = () => {
-    setShowAddInput(false)
-  }
+
 
 
   const handleTagClick = (tag: string) => {
@@ -213,6 +160,7 @@ const PageNotes = ({ toggleTheme }: Props) => {
             <Title>
               <h1>Notes</h1>
             </Title>
+
             <Box sx={{ flexGrow: 0, margin: "10px" }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -236,6 +184,8 @@ const PageNotes = ({ toggleTheme }: Props) => {
                 onClose={handleCloseUserMenu}
               >
 
+
+
                 <MenuItem sx={{ margin: "10px" }} onClick={() => logOut()}>
                   <Typography textAlign="center">Sair</Typography>
                 </MenuItem>
@@ -258,22 +208,39 @@ const PageNotes = ({ toggleTheme }: Props) => {
               placeholder="Search your notes"
               onChange={(e) => setSearchInput(e.target.value)}
             />
+
             <Avatar
               alt="João"
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80"
+              src="https://media.licdn.com/dms/image/D4D03AQHuoMNIGYAEMg/profile-displayphoto-shrink_200_200/0/1677606628858?e=1692835200&v=beta&t=eoEJlyb_50tgiHcBVwiuEy08o2vYzu7ISiXJcnousRY"
               sx={{ margin: "10px" }} />
           </Search>
+
+          <Content>
+            <Button
+              onClick={() => navigate("/notes/addNote")}
+              sx={{
+                background: '#3A3A3A',
+                border: `3px solid ${colors.background}`, borderRadius: "100px", height: "58px", width: "58px",
+                display: "flex", justifyContent: "center", position: "relative",
+                zIndex: "1", '&:hover': {
+                  background: colors.inputBackground,
+                }
+              }}>
+              <AddIcon fontSize="medium" sx={{ color: "#ccc" }} />
+            </Button>
+          </Content>
+
           <TagsContent>
-            <div className="tag">
+            <div className="tag" key={"All"}>
               <button
-                id={tagSelected === "" ? 'tag-btn-selected' : 'tag-btn'}
-                onClick={() => handleTagClick('')}
+                id={tagSelected === "All" ? 'tag-btn-selected' : 'tag-btn'}
+                onClick={() => handleTagClick('All')}
               >
                 All({noteList.length})
               </button>
             </div>
-            {tags.length !== 0 && (
-              tags.map((tag) => (
+            {tags?.length !== 0 && (
+              tags?.map((tag) => (
                 <div className="tag" key={tag}>
                   <button id={tagSelected === tag ? 'tag-btn-selected' : 'tag-btn'} onClick={() => handleTagClick(tag)}>
 
@@ -284,53 +251,6 @@ const PageNotes = ({ toggleTheme }: Props) => {
               ))
             )}
           </TagsContent>
-          <Content>
-            <div>
-              <form onSubmit={handleSubmit}>
-
-                <TextField
-                  id="outlined-controlled"
-                  sx={{
-                    margin: "10px", background: `${colors.background}`, borderRadius: "10px",
-                    color: `${colors.text}`
-                  }}
-                  inputProps={{
-                    style: {
-                      color: `${colors.text}`,
-                    },
-                  }}
-                  autoComplete="off"
-                  required
-                  label="Título"
-                  InputLabelProps={{
-                    sx: { color: `${colors.text}` }
-                  }}
-                  value={note.title}
-                  onChange={(e) => setNote({ ...note, title: e.target.value })}
-                />
-                <TextField
-                  id="outlined-controlled"
-                  sx={{
-                    margin: "10px", background: `${colors.background}`, borderRadius: "10px",
-                    color: `${colors.text}`
-                  }}
-                  inputProps={{
-                    style: {
-                      color: `${colors.text}`,
-                    },
-                  }}
-                  autoComplete="off"
-                  label="Conteúdo"
-                  InputLabelProps={{
-                    sx: { color: `${colors.text}` }
-                  }}
-                  value={note.content}
-                  onChange={(e) => setNote({ ...note, content: e.target.value })}
-                />
-                <AddButton />
-              </form>
-            </div>
-          </Content>
         </>
       )}
 
@@ -340,10 +260,11 @@ const PageNotes = ({ toggleTheme }: Props) => {
           onDelete={handleDelete}
           note={noteToEdit}
           submit={handleModalSubmit}
+          tags={tags}
         />
       )}
       <Result>
-        {filteredTags.length > 0 ? (
+        {tagSelected !== "All" ? (
           tagsToShow.map((note, index) => (
             <NoteCard
               key={index}
@@ -361,8 +282,7 @@ const PageNotes = ({ toggleTheme }: Props) => {
                 color={note.color}
                 onEdit={handleEdit}
               />
-            ))
-          )
+            )))
         )}
       </Result>
 
@@ -376,13 +296,13 @@ const PageNotes = ({ toggleTheme }: Props) => {
               onClick={() => navigate("/notes/addNote")}
               sx={{
                 background: '#3A3A3A',
-                border: `3px solid ${colors.background}`, borderRadius: "100px", height: "58px", width: "58px",
+                border: `3px solid ${colors.background}`, borderRadius: "100px", height: "58px", width: "38px",
                 display: "flex", justifyContent: "center", position: "relative",
                 zIndex: "1", '&:hover': {
                   background: colors.inputBackground,
                 }
               }}>
-              <AddIcon fontSize="medium" sx={{ color: "#ccc" }} />
+              <AddIcon fontSize="small" sx={{ color: "#ccc" }} />
             </Button>
           </NavBar>
 

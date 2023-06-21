@@ -8,31 +8,32 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
-import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 
 
 
 import { useContext, useEffect, useState } from "react";
 import { INoteContent } from "../../Interfaces/INote";
 import { autoResize, postNote } from "../../services/NoteService"
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-const AddNotePage = () => {
+
+interface Props{
+  tags: string[]
+}
+
+const AddNotePage = ({tags}: Props) => {
 
   const navigate = useNavigate()
 
   const colorsList = ["#ebf781", "#a5f5a5", "#f19c9c", "#bab6f3", "#dfb1ec",
     "#a5f5a5", "#9ceef1", "#dfb1ec", "#ebf781", "#a5f5a5",
     "#f19c9c", "#dfb1ec"]
-
-  const tags = ["Work", "Dreams", "Food", "Study", "Travel"]
 
   const [note, setNote] = useState<INoteContent>({
     id: 0,
@@ -101,7 +102,7 @@ const AddNotePage = () => {
           <h1>Notes</h1>
         </Title>
         <Button
-          onClick={(e) => handleSubmit()}
+          onClick={() => handleSubmit()}
           type="submit"
           sx={{
             background: '#3A3A3A',
@@ -123,16 +124,28 @@ const AddNotePage = () => {
               <BookmarkBorderOutlinedIcon />
               <FormControl variant="outlined" sx={{
                 m: 1, minWidth: 90,
-                border: 'transparent', // ou border: 'transparent'
+                border: 'transparent',
                 '&:focus': {
-                  border: 'transparent', // ou border: 'transparent'
+                  border: 'transparent',
                 },
               }}>
-                <InputLabel sx={{ color: `${colors.text}` }}>Tag</InputLabel>
+                <InputLabel sx={{ color: `${colors.text2}` }}>Tag</InputLabel>
                 <Select
                   labelId="demo-simple-select-standard-label"
                   id="demo-simple-select-standard"
-                  sx={{ color: `${colors.text}` }}
+                  sx={{
+                    color: "white",
+                    '.MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      border: "none",
+                      color: `${colors.text2}`
+                    },
+                    '.MuiSvgIcon-root ': {
+                      fill: "white !important",
+                    }
+                  }}
                   value={tag}
                   onChange={(e) => setNote({ ...note, tag: e.target.value })}
                 >

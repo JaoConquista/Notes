@@ -36,9 +36,6 @@ const NoteCard = ({ note, color, onEdit }: NoteCard) => {
           
           <CardContent
             sx={{ paddingLeft: "15px" }}>
-            {/* <Typography sx={{ fontSize: 14, padding: "0 5px 0 10px" }} color="text.secondary" gutterBottom>
-                Tarefa
-              </Typography> */}
             <Typography variant="h5">{note.title}</Typography>
             <Typography variant="body2">{note.content}</Typography>
           </CardContent>

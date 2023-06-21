@@ -1,19 +1,19 @@
 import 'styled-components'
 //Sobre escrevendo o módulo default theme
 declare module 'styled-components' {
-    export interface DefaultTheme{
+    export interface DefaultTheme {
         title: string;
         colors: {
             primary: string;
             secondary: string;
-    
-            background:string;
+
+            background: string;
             inputBackground: string;
             text: string;
-            white: string
+            text2: string
 
-            buttonBackGround: string,
-            buttonText:string,
+            button: string,
+            buttonSelected: string,
         }
     }
 }

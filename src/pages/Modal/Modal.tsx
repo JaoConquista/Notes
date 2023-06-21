@@ -1,4 +1,3 @@
-import React from "react";
 import IconButton from "@mui/material/IconButton";
 import { ThemeContext } from "styled-components";
 import CheckIcon from "@mui/icons-material/Check";
@@ -14,7 +13,7 @@ import Button from '@mui/material/Button';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 
 
 
@@ -27,15 +26,15 @@ type Props = {
   onDelete: (id: number) => void;
   onClose: () => void;
   submit: (note: INoteContent) => void;
+  tags: string[]
 };
 
-const Modal = ({ note, onClose, onDelete, submit }: Props) => {
+const Modal = ({ note, onClose, onDelete, submit, tags }: Props) => {
 
   const [noteToEdit, setNoteToEdit] = useState<INoteContent | null>(null);
 
   const { colors } = useContext(ThemeContext)
 
-  const tags = ["Work", "Dreams", "Food", "Study", "Travel"]
 
   useEffect(() => {
     if (note) {
@@ -47,17 +46,15 @@ const Modal = ({ note, onClose, onDelete, submit }: Props) => {
     autoResize('edit-content')
   }, [noteToEdit])
 
+  
+  
+
   const handleSubmitClick = () => {
     if (noteToEdit === null) return;
 
     submit(noteToEdit);
   };
 
-  const [age, setAge] = React.useState('');
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value);
-  };
 
   return (
     <Main>
@@ -92,12 +89,24 @@ const Modal = ({ note, onClose, onDelete, submit }: Props) => {
                   border: 'transparent', // ou border: 'transparent'
                 },
               }}>
-                <InputLabel sx={{ color: `${colors.text}` }}>Tag</InputLabel>
+                <InputLabel sx={{ color: `${colors.text2}`}}>{note?.tag}</InputLabel>
                 <Select
                   labelId="demo-simple-select-standard-label"
                   id="demo-simple-select-standard"
-                  sx={{ color: `${colors.text}` }}
-                  value={note?.tag}
+                  sx={{
+                    color: "white",
+                    '.MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      border: "none",
+                      color: `${colors.text2}`
+                    },
+                    '.MuiSvgIcon-root ': {
+                      fill: "white !important",
+                    }
+                  }}
+                  value={noteToEdit?.tag}
                   onChange={(e) => setNoteToEdit({ ...note, tag: e.target.value })}
                 >
                   {tags.length >= 0 &&(

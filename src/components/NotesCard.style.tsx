@@ -16,9 +16,9 @@ export const Image = styled.div`
 
     img{
         min-width: 50%;
-        min-height: 55%;
+        height: 100%;
         border-radius: 25px;
-        margin: auto;
+        margin: 10px;
     }
 
 `

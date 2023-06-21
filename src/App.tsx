@@ -5,9 +5,10 @@ import dark from "./styles/themes/dark";
 import PageNotes from "./pages/Notes/PageNotes";
 import Login from "./pages/Login/Login";
 import CreateAccount from "./pages/CreateAccount/CreateAccount";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GlobalStyle from "../global"
 import AddNotePage from "../src/pages/AddNote/AddNotePage"
+import { useTag } from "./hooks/useTag";
 
 
 interface Component {
@@ -39,6 +40,10 @@ function App() {
     }
   }
 
+  const [tags, setTags] = useState(["Work", "Dreams", "Travel", "Food", "Study"])  
+
+  useTag(tags)
+ 
 
   return (
     <div className="App">
@@ -48,8 +53,8 @@ function App() {
             <Routes>
               <Route path="/" element={<CreateAccount />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/notes" element={<AuthenticatedRoute component={<PageNotes toggleTheme={toggleTheme} />} />}/>
-              <Route path="/notes/addNote" element={<AuthenticatedRoute component={<AddNotePage/>} />}/>
+              <Route path="/notes" element={<AuthenticatedRoute component={<PageNotes toggleTheme={toggleTheme} tags={tags}/>} />}/>
+              <Route path="/notes/addNote" element={<AuthenticatedRoute component={<AddNotePage tags={tags}/>} />}/>
             </Routes>
           </BrowserRouter>
         </ThemeProvider>

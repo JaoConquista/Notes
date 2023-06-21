@@ -8,9 +8,9 @@ export default {
         background:'#f8f9fa',
         inputBackground: '#495057',
         text: '#212529',
-        white: '#f8f9fa',
+        text2: '#212529',
         
-        buttonBackGround: "#212529",
-        buttonText: "#f8f9fa"
+        button: "#495057",
+        buttonSelected: "#CCCCFF",
     }
 }

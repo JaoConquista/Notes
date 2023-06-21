@@ -7,10 +7,10 @@ export default {
 
         background:'#212529',
         inputBackground: '#495057',
-        text: '#f8f9fa',
-        white: '#f8f9fa',
+        text: '#212529',
+        text2: '#BEBEBE',
         
-        buttonBackGround: "#f8f9fa",
-        buttonTexte: "#212529"
+        button: "#BEBEBE",
+        buttonSelected: "#CCCCFF",
     }
 }

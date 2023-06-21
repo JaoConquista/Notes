@@ -37,7 +37,7 @@ width: 100%
 `
 
 export const Content = styled.div`
-    height: 12em;
+    height: 6em;
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -53,6 +53,7 @@ export const Content = styled.div`
         }
     }
 `
+
 export const Search = styled.div`
     margin: 0 auto;
     text-align: center;
@@ -126,7 +127,7 @@ export const NavBar = styled.div`
     background-color: transparent;
     position: fixed;
     left: 1;
-    bottom: 20px;
+    bottom: 7px;
     z-index: 100;
 `
 
@@ -238,29 +239,30 @@ export const TagsContent = styled.div`
   }
 
   #tag-btn{
-    width: 60px;
-    height: 35px;
+    width: 70px;
+    height: 45px;
     font-size: 0.8rem;
-    border-radius: 10px;
+    border-radius: 12px;
     margin-left: 10px;
     margin-right: 3px;
 
     background: ${props => props.theme.colors.background};
-    color: ${props => props.theme.colors.secondary};
-    border: 1px solid ${props => props.theme.colors.secondary};
+    color: ${props => props.theme.colors.button};
+    border: 1px solid ${props => props.theme.colors.button};
   }
 
   #tag-btn-selected{
-    width: 60px;
-    height: 35px;
+    width: 75px;
+    height: 45px;
     font-size: 0.8rem;
-    border-radius: 10px;
+    font-weight: 600;
+    border-radius: 12px;
     margin-left: 10px;
     margin-right: 3px;
 
-    background: ${props => props.theme.colors.buttonBackGround};
-    color: ${props => props.theme.colors.buttonText};
-    border: 1px solid ${props => props.theme.colors.buttonText};
+    background: ${props => props.theme.colors.buttonSelected};
+    color: ${props => props.theme.colors.text};
+    border: 1px solid ${props => props.theme.colors.buttonSelected};
   }
 `
 
