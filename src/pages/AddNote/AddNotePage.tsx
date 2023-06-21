@@ -23,11 +23,11 @@ import { autoResize, postNote } from "../../services/NoteService"
 import { useNavigate } from "react-router-dom";
 
 
-interface Props{
+interface Props {
   tags: string[]
 }
 
-const AddNotePage = ({tags}: Props) => {
+const AddNotePage = ({ tags }: Props) => {
 
   const navigate = useNavigate()
 
@@ -61,22 +61,22 @@ const AddNotePage = ({tags}: Props) => {
   }, [note])
 
   const colorNote = () => {
-    let randomColor = colorsList[Math.floor(Math.random() * (colorsList.length))]
+    const randomColor = colorsList[Math.floor(Math.random() * (colorsList.length))]
 
-    setNote({ ...note, color: randomColor });
+    return randomColor
 
   }
 
   const createNote = async (note: INoteContent) => {
 
+    const randomColor = colorNote();
+    const noteWithColor = { ...note, color: randomColor };
+
     try {
-      console.log(note)
 
-      colorNote()
+      await postNote(noteWithColor)
 
-      console.log(note)
-
-      await postNote(note);
+      console.log(noteWithColor)
 
       setNote({ id: note.id, title: " ", content: " ", color: "", image: "", tag: "" });
 
@@ -89,12 +89,6 @@ const AddNotePage = ({tags}: Props) => {
     }
   }
 
-
-  const handleSubmit = async () => {
-
-    await createNote(note)
-
-  }
   return (
     <Main>
       <Search>
@@ -102,7 +96,7 @@ const AddNotePage = ({tags}: Props) => {
           <h1>Notes</h1>
         </Title>
         <Button
-          onClick={() => handleSubmit()}
+          onClick={() => createNote(note)}
           type="submit"
           sx={{
             background: '#3A3A3A',
@@ -149,7 +143,7 @@ const AddNotePage = ({tags}: Props) => {
                   value={tag}
                   onChange={(e) => setNote({ ...note, tag: e.target.value })}
                 >
-                  {tags.length >= 0 &&(
+                  {tags.length >= 0 && (
                     tags.map((tag) => (
                       <MenuItem value={tag}>{tag}</MenuItem>
                     ))

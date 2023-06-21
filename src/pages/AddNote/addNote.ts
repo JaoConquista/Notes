@@ -75,7 +75,7 @@ export const Form = styled.form`
             width: 75%;
             overflow-y: auto;
             resize: none;
-            color: ${props => props.theme.colors.text};
+            color: ${props => props.theme.colors.text2};
             background-color: ${props => props.theme.colors.background};
             border: none;
             font-size:25px ;
@@ -89,7 +89,7 @@ export const Form = styled.form`
             max-width: 80%;
             overflow-y: auto;
             resize: none;
-            color: ${props => props.theme.colors.text};
+            color: ${props => props.theme.colors.text2};
             background-color: ${props => props.theme.colors.background};
             border: none;
             font-size: 20px ;
@@ -105,7 +105,7 @@ export const Form = styled.form`
             resize: none;
             border: none;
 
-            color: ${props => props.theme.colors.text};
+            color: ${props => props.theme.colors.text2};
             background-color: ${props => props.theme.colors.background};
             font-size: 14px ;
     }

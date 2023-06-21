@@ -94,6 +94,7 @@ const Modal = ({ note, onClose, onDelete, submit, tags }: Props) => {
                   labelId="demo-simple-select-standard-label"
                   id="demo-simple-select-standard"
                   sx={{
+                    width: "100%",
                     color: "white",
                     '.MuiOutlinedInput-notchedOutline': {
                       border: 'none'
