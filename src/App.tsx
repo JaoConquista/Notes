@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
-import { ThemeProvider } from "styled-components";
+import { ThemeProvider, DefaultTheme } from "styled-components";
 import light from "./styles/themes/light";
 import dark from "./styles/themes/dark";
 import PageNotes from "./pages/Notes/PageNotes";
@@ -9,21 +9,18 @@ import { useEffect, useState } from "react";
 import GlobalStyle from "../global"
 import AddNotePage from "../src/pages/AddNote/AddNotePage"
 import { useTag } from "./hooks/useTag";
-
+import usePersistedState from "./hooks/usePersistedState"
 
 interface Component {
   component: JSX.Element
 }
 
-
-
 function App() {
 
-  const [theme, setTheme] = useState(dark)
+  const [theme, setTheme] = usePersistedState<DefaultTheme>('theme', dark)
 
   const toggleTheme = () => {
     setTheme(theme.title === 'light' ? dark : light);
-    console.log(theme)
   }
   
   const AuthenticatedRoute = ({ component }: Component) => {

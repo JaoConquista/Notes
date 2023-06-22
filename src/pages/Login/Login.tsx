@@ -1,3 +1,4 @@
+import { useContext } from 'react'
 import TextField from "@mui/material/TextField";
 import { Main, Form } from "./stylesLogin"
 import SubmitButton from "../../components/SubmitButton";
@@ -8,16 +9,16 @@ import { Account } from "../../Interfaces/Account";
 import { ToastContainer } from "react-toastify";
 import { errorEmail, errorPassword } from "../../utils/toast";
 import { useAuth } from "../../hooks/useAuth";
+import { ThemeContext } from "styled-components";
 
 type LoginProps = {
   email: string,
   senha: string
 }
 
-
-
-
 const Login = () => {
+
+  const {colors} = useContext(ThemeContext)
 
   const navigate = useNavigate()
 
@@ -96,6 +97,18 @@ const Login = () => {
           <TextField
             id="login-input1"
             required
+            sx={{
+              color:`${colors.text2}`,
+              '.MuiOutlinedInput-notchedOutline': {
+                border: `1px solid ${colors.text2}`,
+              }
+            }}
+            inputProps={{
+              style: {color: `${colors.text2}`}
+            }}
+            InputLabelProps={{
+              style: {color: `${colors.text2}`}
+            }}
             label="E-mail"
             type="email"
             aria-required
@@ -103,6 +116,18 @@ const Login = () => {
           />
           <TextField
             id="login-input2"
+            sx={{
+              color:`${colors.text2}`,
+              '.MuiOutlinedInput-notchedOutline': {
+                border: `1px solid ${colors.text2}`,
+              }
+            }}
+            inputProps={{
+              style: {color: `${colors.text2}`}
+            }}
+            InputLabelProps={{
+              style: {color: `${colors.text2}`}
+            }}
             label="Password"
             type="password"
             aria-required
