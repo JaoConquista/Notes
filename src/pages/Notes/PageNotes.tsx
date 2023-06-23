@@ -9,9 +9,8 @@ import {
   editNote,
 } from "../../services/NoteService";
 import { useAuth } from "../../hooks/useAuth";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Switch from 'react-switch'
-import { useTag } from "../../hooks/useTag";
 
 //Styles
 import { App, Content, Result, Search, Title, Footer, NavBar, TagsContent } from "./styles"
@@ -112,9 +111,19 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
   };
 
   const updateNote = async (note: INoteContent) => {
-    await editNote(note);
+    console.time("Promise")
 
-    await fecthData()
+   const result: any = await Promise.all([
+    editNote(note),
+    fecthData()
+  ])
+
+    result[0];
+    result[1];
+    
+    //Com essa estrutura a velocidade de execução do código aumentou.
+
+    console.timeEnd("Promise")
   };
 
   const handleModalSubmit = async (note: INoteContent) => {
@@ -264,7 +273,7 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
         />
       )}
       <Result>
-        {tagSelected !== "All" ? (
+        {tagSelected !== "All"  && !showModal ? (
           tagsToShow.map((note, index) => (
             <NoteCard
               key={index}
@@ -272,16 +281,21 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
               color={note.color}
               onEdit={handleEdit}
             />
+
           ))
         ) : (
           !showModal && (
             notesToShow.map((note, index) => (
-              <NoteCard
-                key={index}
-                note={note}
-                color={note.color}
-                onEdit={handleEdit}
-              />
+
+              <>
+                <NoteCard
+                  key={index}
+                  note={note}
+                  color={note.color}
+                  onEdit={handleEdit}
+                />
+              </>
+
             )))
         )}
       </Result>

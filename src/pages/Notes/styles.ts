@@ -89,16 +89,30 @@ export const Result = styled.div`
      /*display: flex;
     flex-wrap: wrap;
     margin: 0 auto;
-    justify-content: start; */
+    justify-content: start;
 
+    display: grid;
+    grid-template-columns: repeat(4, 2fr); /* Definindo 4 colunas */
     column-count: 4;
+
+    .vertical{
+        grid-column: span 2;
+    }
+
 
     @media only screen and (max-width: 768px) {
     column-count:3 ;
     padding-bottom: 70px;
+
+    .vertical{
+        grid-column: span 3;
+    }
     }
     @media only screen and (max-width: 650px) {
-    column-count:2 
+    column-count:2 ;
+    .vertical{
+        grid-column: span 4;
+    }
     }
 `
 
@@ -160,12 +174,12 @@ justify-content: center;
     width: 80%; */
 
 #title-add-mobile{
-    /* background-color: ${props=> props.theme.colors.background}; */
+    /* background-color: ${props => props.theme.colors.background}; */
 
 }
 
 #cancel-mobile-btn{
-    color: ${props=> props.theme.colors.text};
+    color: ${props => props.theme.colors.text};
 }
 `
 

@@ -68,25 +68,25 @@ const AddNotePage = ({ tags }: Props) => {
   }
 
   const createNote = async (note: INoteContent) => {
-
     const randomColor = colorNote();
     const noteWithColor = { ...note, color: randomColor };
 
     try {
-
+      
       await postNote(noteWithColor)
-
-      console.log(noteWithColor)
 
       setNote({ id: note.id, title: " ", content: " ", color: "", image: "", tag: "" });
 
       navigate('/notes')
+      
+     
 
     } catch (error) {
 
       return error;
 
-    }
+    } 
+    
   }
 
   return (
