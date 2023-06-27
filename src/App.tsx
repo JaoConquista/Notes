@@ -37,7 +37,7 @@ function App() {
     }
   }
 
-  const [tags, setTags] = useState(["Work", "Dreams", "Travel", "Food", "Study"])  
+  const [tags] = useState(["Work", "Dreams", "Travel", "Food", "Study"])  
 
   useTag(tags)
  

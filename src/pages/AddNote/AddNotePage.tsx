@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import IconButton from "@mui/material/IconButton";
 import { ThemeContext } from "styled-components";
 import CheckIcon from "@mui/icons-material/Check";
@@ -14,6 +14,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import RedoIcon from '@mui/icons-material/Redo';
+import UndoIcon from '@mui/icons-material/Undo';
 
 
 
@@ -21,11 +23,14 @@ import { useContext, useEffect, useState } from "react";
 import { INoteContent } from "../../Interfaces/INote";
 import { autoResize, postNote } from "../../services/NoteService"
 import { useNavigate } from "react-router-dom";
+import { debounce } from 'lodash';
 
 
 interface Props {
   tags: string[]
 }
+
+let lastNote: INoteContent
 
 const AddNotePage = ({ tags }: Props) => {
 
@@ -47,18 +52,16 @@ const AddNotePage = ({ tags }: Props) => {
   const [image, setImage] = useState("")
   const [tag, setTag] = React.useState("");
   const { colors } = useContext(ThemeContext)
-
-  console.log(image)
-
-  useEffect(() => {
-    setImage(note.image)
-    setTag(note.tag);
-  }, [note]);
+  const [notePilha, setNotePilha] = useState<INoteContent[]>([]);
 
   useEffect(() => {
     autoResize('edit-title')
     autoResize('edit-content')
-  }, [note])
+
+    setImage(note.image)
+    setTag(note.tag);
+    debouncedSave(note)
+  }, [note]);
 
   const colorNote = () => {
     const randomColor = colorsList[Math.floor(Math.random() * (colorsList.length))]
@@ -72,22 +75,46 @@ const AddNotePage = ({ tags }: Props) => {
     const noteWithColor = { ...note, color: randomColor };
 
     try {
-      
+
       await postNote(noteWithColor)
 
       setNote({ id: note.id, title: " ", content: " ", color: "", image: "", tag: "" });
 
       navigate('/notes')
-      
-     
+
+
 
     } catch (error) {
 
       return error;
 
-    } 
-    
+    }
+
   }
+
+  const undoNote = async () => {
+
+    if (notePilha.length <= 1) {
+      lastNote = notePilha[0];
+      setNote(lastNote);
+      setNotePilha([lastNote]); // Atualiza a pilha de notas com apenas a última nota
+    } else {
+      const lastNotePilha = notePilha.slice(0, notePilha.length - 1);
+      lastNote = lastNotePilha[lastNotePilha.length - 1];
+      setNotePilha(lastNotePilha);
+      setNote(lastNote);
+    }
+  }
+
+  const debouncedSave = useCallback(
+    debounce((nextValue) => {
+      setNotePilha((prevNotePilha) => [...prevNotePilha, nextValue])
+      console.log(notePilha)
+    }, 500),
+    [notePilha]
+  )
+
+  console.log(notePilha)
 
   return (
     <Main>
@@ -109,6 +136,44 @@ const AddNotePage = ({ tags }: Props) => {
           <CheckIcon fontSize="medium" sx={{ color: "#ccc" }} />
         </Button>
 
+        <div className="undo-redo-controls">
+          <Button
+            onClick={() => undoNote()}
+            sx={{
+              background: '#3A3A3A',
+              borderRadius: "100px", height: "50px", width: "58px",
+              display: "flex", justifyContent: "center", position: "relative",
+              zIndex: "1", '&:hover': {
+                background: colors.inputBackground,
+              }
+            }}>
+            <UndoIcon fontSize="medium" sx={{ color: "#ccc" }} />
+          </Button>
+          <Button
+            sx={{
+              background: '#3A3A3A',
+              borderRadius: "100px", height: "50px", width: "58px",
+              display: "flex", justifyContent: "center", position: "relative",
+              zIndex: "1", '&:hover': {
+                background: colors.inputBackground,
+              }
+            }}>
+            <RedoIcon fontSize="medium" sx={{ color: `${colors.background}` }} />
+          </Button>
+        </div>
+
+        <Button
+          sx={{
+            background: '#3A3A3A',
+            borderRadius: "100px", height: "50px", width: "38px",
+            display: "flex", justifyContent: "center", position: "relative",
+            zIndex: "1", '&:hover': {
+              background: colors.inputBackground,
+            }
+          }}>
+          <MoreVertIcon fontSize="small" sx={{ color: "#ccc" }} />
+        </Button>
+
       </Search>
 
       <div className="content">
@@ -117,7 +182,7 @@ const AddNotePage = ({ tags }: Props) => {
             <div id="select-tags">
               <BookmarkBorderOutlinedIcon />
               <FormControl variant="outlined" sx={{
-                m: 1, minWidth: 90,
+                minWidth: 85,
                 border: 'transparent',
                 '&:focus': {
                   border: 'transparent',
@@ -144,8 +209,8 @@ const AddNotePage = ({ tags }: Props) => {
                   onChange={(e) => setNote({ ...note, tag: e.target.value })}
                 >
                   {tags.length >= 0 && (
-                    tags.map((tag) => (
-                      <MenuItem value={tag}>{tag}</MenuItem>
+                    tags.map((tag, index) => (
+                      <MenuItem value={tag} key={index}>{tag}</MenuItem>
                     ))
                   )}
                 </Select>
@@ -160,6 +225,7 @@ const AddNotePage = ({ tags }: Props) => {
             <textarea
               autoComplete="off"
               id="title"
+              value={note.title}
               placeholder="Título .."
               onInput={() => autoResize('title')}
               onChange={(e) => setNote({ ...note, title: e.target.value })}
@@ -174,6 +240,7 @@ const AddNotePage = ({ tags }: Props) => {
           <textarea
             autoComplete="off"
             id="content"
+            value={note.content}
             onInput={() => autoResize('content')}
             placeholder="Conteúdo ..."
             onChange={(e) => setNote({ ...note, content: e.target.value })}
@@ -182,6 +249,7 @@ const AddNotePage = ({ tags }: Props) => {
           <textarea
             autoComplete="off"
             id="input-image"
+            value={note.image}
             onInput={() => autoResize('input-image')}
             placeholder="Link da sua Imagem se quiser ;)"
             onChange={(e) => setNote({ ...note, image: e.target.value })}

@@ -197,6 +197,10 @@ export const Search = styled.div`
     align-items: center;
     justify-content: space-between;
 
+    .undo-redo-controls{
+        display: flex;
+    }
+
    
 `
 
@@ -211,8 +215,8 @@ export const Tags = styled.div`
 
     #select-tags{
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        
     }
 
     #items{

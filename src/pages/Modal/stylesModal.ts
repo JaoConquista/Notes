@@ -197,6 +197,10 @@ export const Search = styled.div`
     align-items: center;
     justify-content: space-between;
 
+    .undo-redo-controls{
+        display: flex;
+    }
+
    
 `
 

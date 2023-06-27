@@ -71,13 +71,18 @@ export const Search = styled.div`
         width: 80%;
         height: 38px;
         background-color: #3A3A3A;
-        color: ${props => props.theme.colors.text};
+        color: ${props => props.theme.colors.text2};
         border: none;
 
         font-size: medium;
     }
     input:focus{
         outline: none;
+    }
+
+    hr{
+        border: 1px solid #ccc;
+        height: 28%;
     }
 `
 
@@ -130,6 +135,18 @@ display: none;
     left: 0;
     width: 100%;
     height: 50px;
+
+    #icons-part1, #icons-part2{
+        width: 45%;
+        display: flex;
+        justify-content: space-around;
+    }
+    #icons-part1{
+        padding-right: 15px;
+    }
+    #icons-part2{
+        padding-left: 15px;
+    }
 
 }
 
@@ -253,7 +270,13 @@ export const TagsContent = styled.div`
   }
 
   #tag-btn{
-    width: 70px;
+    min-width: 70px;
+    display: flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
     height: 45px;
     font-size: 0.8rem;
     border-radius: 12px;
@@ -266,7 +289,15 @@ export const TagsContent = styled.div`
   }
 
   #tag-btn-selected{
-    width: 75px;
+    display: flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+
+
+    min-width: 70px;
     height: 45px;
     font-size: 0.8rem;
     font-weight: 600;

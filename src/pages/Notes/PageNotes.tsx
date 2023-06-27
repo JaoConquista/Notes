@@ -16,7 +16,7 @@ import Switch from 'react-switch'
 import { App, Content, Result, Search, Title, Footer, NavBar, TagsContent } from "./styles"
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import ModeIcon from '@mui/icons-material/Mode';
 import MicNoneRoundedIcon from '@mui/icons-material/MicNoneRounded';
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
@@ -32,6 +32,7 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 
 interface Props {
   toggleTheme(): void;
@@ -113,14 +114,14 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
   const updateNote = async (note: INoteContent) => {
     console.time("Promise")
 
-   const result: any = await Promise.all([
-    editNote(note),
-    fecthData()
-  ])
+    const result: any = await Promise.all([
+      editNote(note),
+      fecthData()
+    ])
 
     result[0];
     result[1];
-    
+
     //Com essa estrutura a velocidade de execução do código aumentou.
 
     console.timeEnd("Promise")
@@ -151,6 +152,10 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleOpenMenu = () => {
+
+  }
 
 
 
@@ -213,15 +218,28 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
             </Box>
 
             <input
+              id="search-input"
               type="text"
+              autoComplete="off"
               placeholder="Search your notes"
               onChange={(e) => setSearchInput(e.target.value)}
             />
 
+            <Box sx={{ flexGrow: 0, margin: "10px" }}>
+              <Tooltip title="Open settings">
+                <IconButton>
+                  <GridViewOutlinedIcon fontSize="medium" sx={{ color: `#ccc` }} />
+                </IconButton>
+              </Tooltip>
+            </Box>
+
+
+            <hr />
+
             <Avatar
               alt="João"
               src="https://media.licdn.com/dms/image/D4D03AQHuoMNIGYAEMg/profile-displayphoto-shrink_200_200/0/1677606628858?e=1692835200&v=beta&t=eoEJlyb_50tgiHcBVwiuEy08o2vYzu7ISiXJcnousRY"
-              sx={{ margin: "10px" }} />
+              sx={{ margin: "10px" }}/>
           </Search>
 
           <Content>
@@ -273,7 +291,7 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
         />
       )}
       <Result>
-        {tagSelected !== "All"  && !showModal ? (
+        {tagSelected !== "All" && !showModal ? (
           tagsToShow.map((note, index) => (
             <NoteCard
               key={index}
@@ -302,8 +320,11 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
 
       {!showModal && (
         <Footer>
-          <CheckBoxIcon fontSize="small" sx={{ color: '#e9ecef' }} />
-          <CollectionsOutlinedIcon fontSize="small" sx={{ color: '#e9ecef' }} />
+          <div id="icons-part1">
+            <CheckBoxOutlinedIcon fontSize="small" sx={{ color: '#e9ecef' }} />
+            <CollectionsOutlinedIcon fontSize="small" sx={{ color: '#e9ecef' }} />
+          </div>
+
 
           <NavBar>
             <Button
@@ -320,8 +341,10 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
             </Button>
           </NavBar>
 
-          <MicNoneRoundedIcon fontSize="small" sx={{ color: '#e9ecef' }} />
-          <ModeIcon fontSize="small" sx={{ color: '#e9ecef' }} />
+          <div id="icons-part2">
+            <MicNoneRoundedIcon fontSize="small" sx={{ color: '#e9ecef' }} />
+            <ModeIcon fontSize="small" sx={{ color: '#e9ecef' }} />
+          </div>
         </Footer>
       )}
     </App>

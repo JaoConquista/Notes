@@ -9,6 +9,8 @@ import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
+import RedoIcon from '@mui/icons-material/Redo';
+import UndoIcon from '@mui/icons-material/Undo';
 
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -46,8 +48,8 @@ const Modal = ({ note, onClose, onDelete, submit, tags }: Props) => {
     autoResize('edit-content')
   }, [noteToEdit])
 
-  
-  
+
+
 
   const handleSubmitClick = () => {
     if (noteToEdit === null) return;
@@ -75,11 +77,48 @@ const Modal = ({ note, onClose, onDelete, submit, tags }: Props) => {
           <CheckIcon fontSize="medium" sx={{ color: "#ccc" }} />
         </Button>
 
+        <div className="undo-redo-controls">
+          <Button
+            sx={{
+              background: '#3A3A3A',
+              borderRadius: "100px", height: "50px", width: "58px",
+              display: "flex", justifyContent: "center", position: "relative",
+              zIndex: "1", '&:hover': {
+                background: colors.inputBackground,
+              }
+            }}>
+            <UndoIcon fontSize="medium" sx={{ color: "#ccc" }} />
+          </Button>
+          <Button
+            sx={{
+              background: '#3A3A3A',
+              borderRadius: "100px", height: "50px", width: "58px",
+              display: "flex", justifyContent: "center", position: "relative",
+              zIndex: "1", '&:hover': {
+                background: colors.inputBackground,
+              }
+            }}>
+            <RedoIcon fontSize="medium" sx={{ color: `${colors.background}` }} />
+          </Button>
+        </div>
+
+        <Button
+          sx={{
+            background: '#3A3A3A',
+            borderRadius: "100px", height: "50px", width: "38px",
+            display: "flex", justifyContent: "center", position: "relative",
+            zIndex: "1", '&:hover': {
+              background: colors.inputBackground,
+            }
+          }}>
+          <MoreVertIcon fontSize="small" sx={{ color: "#ccc" }} />
+        </Button>
+
       </Search>
 
       <div className="content">
         <Form>
-        <Tags>
+          <Tags>
             <div id="select-tags">
               <BookmarkBorderOutlinedIcon />
               <FormControl variant="outlined" sx={{
@@ -89,7 +128,7 @@ const Modal = ({ note, onClose, onDelete, submit, tags }: Props) => {
                   border: 'transparent', // ou border: 'transparent'
                 },
               }}>
-                <InputLabel sx={{ color: `${colors.text2}`}}>{note?.tag}</InputLabel>
+                <InputLabel sx={{ color: `${colors.text2}` }}>{note?.tag}</InputLabel>
                 <Select
                   labelId="demo-simple-select-standard-label"
                   id="demo-simple-select-standard"
@@ -110,7 +149,7 @@ const Modal = ({ note, onClose, onDelete, submit, tags }: Props) => {
                   value={noteToEdit?.tag}
                   onChange={(e) => setNoteToEdit({ ...note, tag: e.target.value })}
                 >
-                  {tags.length >= 0 &&(
+                  {tags.length >= 0 && (
                     tags.map((tag) => (
                       <MenuItem value={tag}>{tag}</MenuItem>
                     ))
