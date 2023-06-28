@@ -17,11 +17,10 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-
-
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import { INoteContent } from "../../Interfaces/INote";
 import { autoResize } from "../../services/NoteService";
+import { debounce } from 'lodash';
 
 type Props = {
   note: INoteContent;
@@ -31,11 +30,17 @@ type Props = {
   tags: string[]
 };
 
+let undoStack: number = 0
+let redoStack: number = 0
+
 const Modal = ({ note, onClose, onDelete, submit, tags }: Props) => {
 
   const [noteToEdit, setNoteToEdit] = useState<INoteContent | null>(null);
 
   const { colors } = useContext(ThemeContext)
+
+  const [notePilha, setNotePilha] = useState<INoteContent[]>([]);
+  let lastNote: INoteContent
 
 
   useEffect(() => {
@@ -43,11 +48,56 @@ const Modal = ({ note, onClose, onDelete, submit, tags }: Props) => {
       setNoteToEdit(note);
     }
   }, [note]);
+
   useEffect(() => {
     autoResize('edit-title')
     autoResize('edit-content')
+    debouncedSave(noteToEdit)
+    
   }, [noteToEdit])
 
+  const undoNote = () => {
+
+    undoStack++
+
+    if (notePilha.length < 1 || undoStack == notePilha.length) {
+      undoStack = 0
+      lastNote = notePilha[0];
+      setNoteToEdit(lastNote);
+      setNotePilha([lastNote]); // Atualiza a pilha de notas com apenas a última nota
+    } else {
+
+      lastNote = notePilha[(notePilha.length - 1) - undoStack];
+      setNoteToEdit(lastNote);
+      
+    }
+  }
+  
+  const redoNote = () => {
+
+    redoStack++
+
+    if (notePilha.length <= 1 || redoStack == notePilha.length) {
+      redoStack = 0
+      lastNote = notePilha[notePilha.length];
+      setNoteToEdit(lastNote);
+      setNotePilha([lastNote]);
+    } else {
+      lastNote = notePilha[((notePilha.length) - (redoStack + 1))];
+      setNoteToEdit(lastNote);
+      console.log(undoStack)
+      console.log(notePilha)
+    }
+  }
+
+  const debouncedSave = useCallback(
+    debounce((nextValue) => {
+      setNotePilha((prevNotePilha) => [...prevNotePilha, nextValue])
+    }, 500),
+    [notePilha]
+  )
+  
+console.log(notePilha)
 
 
 
@@ -79,6 +129,7 @@ const Modal = ({ note, onClose, onDelete, submit, tags }: Props) => {
 
         <div className="undo-redo-controls">
           <Button
+            onClick={() => undoNote()}
             sx={{
               background: '#3A3A3A',
               borderRadius: "100px", height: "50px", width: "58px",
@@ -90,6 +141,7 @@ const Modal = ({ note, onClose, onDelete, submit, tags }: Props) => {
             <UndoIcon fontSize="medium" sx={{ color: "#ccc" }} />
           </Button>
           <Button
+            onClick={() => redoNote()}
             sx={{
               background: '#3A3A3A',
               borderRadius: "100px", height: "50px", width: "58px",
@@ -98,7 +150,7 @@ const Modal = ({ note, onClose, onDelete, submit, tags }: Props) => {
                 background: colors.inputBackground,
               }
             }}>
-            <RedoIcon fontSize="medium" sx={{ color: `${colors.background}` }} />
+            <RedoIcon fontSize="medium" sx={{ color: "#ccc" }} />
           </Button>
         </div>
 

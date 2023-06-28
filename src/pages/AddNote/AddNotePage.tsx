@@ -30,7 +30,8 @@ interface Props {
   tags: string[]
 }
 
-let lastNote: INoteContent
+let undoStack: number = 0
+let redoStack: number = 0
 
 const AddNotePage = ({ tags }: Props) => {
 
@@ -53,6 +54,7 @@ const AddNotePage = ({ tags }: Props) => {
   const [tag, setTag] = React.useState("");
   const { colors } = useContext(ThemeContext)
   const [notePilha, setNotePilha] = useState<INoteContent[]>([]);
+  let lastNote: INoteContent
 
   useEffect(() => {
     autoResize('edit-title')
@@ -61,6 +63,8 @@ const AddNotePage = ({ tags }: Props) => {
     setImage(note.image)
     setTag(note.tag);
     debouncedSave(note)
+
+    console.log(undoStack)
   }, [note]);
 
   const colorNote = () => {
@@ -82,8 +86,6 @@ const AddNotePage = ({ tags }: Props) => {
 
       navigate('/notes')
 
-
-
     } catch (error) {
 
       return error;
@@ -92,29 +94,47 @@ const AddNotePage = ({ tags }: Props) => {
 
   }
 
-  const undoNote = async () => {
+  const undoNote = () => {
 
-    if (notePilha.length <= 1) {
+    undoStack++
+
+    if (notePilha.length < 1 || undoStack == notePilha.length) {
+      undoStack = 0
       lastNote = notePilha[0];
       setNote(lastNote);
       setNotePilha([lastNote]); // Atualiza a pilha de notas com apenas a última nota
     } else {
-      const lastNotePilha = notePilha.slice(0, notePilha.length - 1);
-      lastNote = lastNotePilha[lastNotePilha.length - 1];
-      setNotePilha(lastNotePilha);
+
+      lastNote = notePilha[(notePilha.length - 1) - undoStack];
       setNote(lastNote);
+      
+    }
+  }
+console.log(notePilha)
+  const redoNote = () => {
+
+    redoStack++
+
+    if (notePilha.length <= 1 || redoStack == notePilha.length) {
+      redoStack = 0
+      lastNote = notePilha[notePilha.length];
+      setNote(lastNote);
+      setNotePilha([lastNote]);
+    } else {
+      lastNote = notePilha[((notePilha.length) - (redoStack + 1))];
+      setNote(lastNote);
+      console.log(undoStack)
+      console.log(notePilha)
     }
   }
 
   const debouncedSave = useCallback(
     debounce((nextValue) => {
       setNotePilha((prevNotePilha) => [...prevNotePilha, nextValue])
-      console.log(notePilha)
     }, 500),
     [notePilha]
   )
 
-  console.log(notePilha)
 
   return (
     <Main>
@@ -150,6 +170,7 @@ const AddNotePage = ({ tags }: Props) => {
             <UndoIcon fontSize="medium" sx={{ color: "#ccc" }} />
           </Button>
           <Button
+            onClick={() => redoNote()}
             sx={{
               background: '#3A3A3A',
               borderRadius: "100px", height: "50px", width: "58px",
@@ -158,7 +179,7 @@ const AddNotePage = ({ tags }: Props) => {
                 background: colors.inputBackground,
               }
             }}>
-            <RedoIcon fontSize="medium" sx={{ color: `${colors.background}` }} />
+            <RedoIcon fontSize="medium" sx={{ color: "#ccc" }} />
           </Button>
         </div>
 
