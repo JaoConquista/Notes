@@ -30,8 +30,7 @@ type Props = {
   tags: string[]
 };
 
-let undoStack: number = 0
-let redoStack: number = 0
+let stackCounter = 0
 
 const Modal = ({ note, onClose, onDelete, submit, tags }: Props) => {
 
@@ -52,41 +51,46 @@ const Modal = ({ note, onClose, onDelete, submit, tags }: Props) => {
   useEffect(() => {
     autoResize('edit-title')
     autoResize('edit-content')
-    debouncedSave(noteToEdit)
-    
+
+    if (noteToEdit && !notePilha.includes(noteToEdit)) {
+      debouncedSave(noteToEdit)
+    }
+
   }, [noteToEdit])
 
   const undoNote = () => {
 
-    undoStack++
+    stackCounter++
 
-    if (notePilha.length < 1 || undoStack == notePilha.length) {
-      undoStack = 0
+    if (notePilha.length < 1 || stackCounter == notePilha.length) {
+      stackCounter = 0
       lastNote = notePilha[0];
       setNoteToEdit(lastNote);
       setNotePilha([lastNote]); // Atualiza a pilha de notas com apenas a última nota
     } else {
 
-      lastNote = notePilha[(notePilha.length - 1) - undoStack];
+      lastNote = notePilha[(notePilha.length - 1) - stackCounter];
       setNoteToEdit(lastNote);
-      
+
     }
   }
-  
+console.log(stackCounter)
   const redoNote = () => {
 
-    redoStack++
+    if (stackCounter > 0) {
+      stackCounter--
 
-    if (notePilha.length <= 1 || redoStack == notePilha.length) {
-      redoStack = 0
-      lastNote = notePilha[notePilha.length];
-      setNoteToEdit(lastNote);
-      setNotePilha([lastNote]);
-    } else {
-      lastNote = notePilha[((notePilha.length) - (redoStack + 1))];
-      setNoteToEdit(lastNote);
-      console.log(undoStack)
-      console.log(notePilha)
+      if (stackCounter === notePilha.length) {
+        stackCounter++;
+        lastNote = notePilha[notePilha.length - 1];
+        setNoteToEdit(lastNote);
+        setNotePilha([lastNote]);
+      } else {
+        lastNote = notePilha[notePilha.length - (stackCounter + 1)];
+        setNoteToEdit(lastNote);
+        console.log(stackCounter);
+        console.log(notePilha);
+      }
     }
   }
 
@@ -96,8 +100,8 @@ const Modal = ({ note, onClose, onDelete, submit, tags }: Props) => {
     }, 500),
     [notePilha]
   )
-  
-console.log(notePilha)
+
+  console.log(notePilha)
 
 
 

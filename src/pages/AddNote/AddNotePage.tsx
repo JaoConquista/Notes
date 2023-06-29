@@ -30,8 +30,7 @@ interface Props {
   tags: string[]
 }
 
-let undoStack: number = 0
-let redoStack: number = 0
+let stackCounter: number = 0
 
 const AddNotePage = ({ tags }: Props) => {
 
@@ -62,9 +61,12 @@ const AddNotePage = ({ tags }: Props) => {
 
     setImage(note.image)
     setTag(note.tag);
-    debouncedSave(note)
 
-    console.log(undoStack)
+    if (!notePilha.includes(note)) {
+      debouncedSave(note)
+    }
+
+    console.log(stackCounter)
   }, [note]);
 
   const colorNote = () => {
@@ -96,35 +98,37 @@ const AddNotePage = ({ tags }: Props) => {
 
   const undoNote = () => {
 
-    undoStack++
+    stackCounter++
 
-    if (notePilha.length < 1 || undoStack == notePilha.length) {
-      undoStack = 0
+    if (notePilha.length < 1 || stackCounter == notePilha.length) {
+      stackCounter = 0
       lastNote = notePilha[0];
       setNote(lastNote);
       setNotePilha([lastNote]); // Atualiza a pilha de notas com apenas a última nota
     } else {
 
-      lastNote = notePilha[(notePilha.length - 1) - undoStack];
+      lastNote = notePilha[(notePilha.length - 1) - stackCounter];
       setNote(lastNote);
-      
+
     }
   }
-console.log(notePilha)
+  console.log(notePilha)
   const redoNote = () => {
 
-    redoStack++
+    if (stackCounter > 0) {
+      stackCounter--
 
-    if (notePilha.length <= 1 || redoStack == notePilha.length) {
-      redoStack = 0
-      lastNote = notePilha[notePilha.length];
-      setNote(lastNote);
-      setNotePilha([lastNote]);
-    } else {
-      lastNote = notePilha[((notePilha.length) - (redoStack + 1))];
-      setNote(lastNote);
-      console.log(undoStack)
-      console.log(notePilha)
+      if (stackCounter === notePilha.length) {
+        stackCounter++;
+        lastNote = notePilha[notePilha.length - 1];
+        setNote(lastNote);
+        setNotePilha([lastNote]);
+      } else {
+        lastNote = notePilha[notePilha.length - (stackCounter + 1)];
+        setNote(lastNote);
+        console.log(stackCounter);
+        console.log(notePilha);
+      }
     }
   }
 
