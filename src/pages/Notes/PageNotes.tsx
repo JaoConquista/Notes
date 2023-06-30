@@ -33,13 +33,15 @@ import Menu from '@mui/material/Menu';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
+import { Account } from "../../Interfaces/Account";
 
 interface Props {
   toggleTheme(): void;
-  tags: string[]
+  tags: string[];
+  user: Account;
 }
 
-const PageNotes = ({ toggleTheme, tags }: Props) => {
+const PageNotes = ({ toggleTheme, tags, user }: Props) => {
   //Qual a melhor forma de inserir valores em um state de objetos ?
   const { logout } = useAuth()
 
@@ -55,6 +57,7 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
   const [tagSelected, setTagSelected] = useState("All");
 
   const [isSelected, setIsSelected] = useState(false);
+  const [perfilImage, setPerfilImage] = useState("")
 
   //filtro de notas
   const filteredNotes =
@@ -75,6 +78,7 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
 
   useEffect(() => {
     fecthData();
+    setPerfilImage(user?.image)
   }, []);
 
 
@@ -100,6 +104,7 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
 
   const handleEdit = (note: INoteContent) => {
     setNoteToEdit(note);
+    
 
     setShowModal(true);
   };
@@ -152,12 +157,6 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
-  const handleOpenMenu = () => {
-
-  }
-
-
 
 
   const handleTagClick = (tag: string) => {
@@ -236,25 +235,19 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
 
             <hr />
 
-            <Avatar
-              alt="João"
-              src="https://media.licdn.com/dms/image/D4D03AQHuoMNIGYAEMg/profile-displayphoto-shrink_200_200/0/1677606628858?e=1692835200&v=beta&t=eoEJlyb_50tgiHcBVwiuEy08o2vYzu7ISiXJcnousRY"
-              sx={{ margin: "10px" }}/>
+            <Button
+            sx={{borderRadius: "100px"}}
+              onClick={() => navigate("/notes/edit-profile")}>
+              <Avatar
+                alt="João"
+                src={`${user?.image}`}
+                sx={{ margin: "10px" }} />
+            </Button>
           </Search>
 
           <Content>
-            <Button
-              onClick={() => navigate("/notes/addNote")}
-              sx={{
-                background: '#3A3A3A',
-                border: `3px solid ${colors.background}`, borderRadius: "100px", height: "58px", width: "58px",
-                display: "flex", justifyContent: "center", position: "relative",
-                zIndex: "1", '&:hover': {
-                  background: colors.inputBackground,
-                }
-              }}>
-              <AddIcon fontSize="medium" sx={{ color: "#ccc" }} />
-            </Button>
+            
+            
           </Content>
 
           <TagsContent>

@@ -178,6 +178,7 @@ console.log(stackCounter)
             <div id="select-tags">
               <BookmarkBorderOutlinedIcon />
               <FormControl variant="outlined" sx={{
+                
                 m: 1, minWidth: 90,
                 border: 'transparent', // ou border: 'transparent'
                 '&:focus': {
@@ -202,8 +203,10 @@ console.log(stackCounter)
                       fill: "white !important",
                     }
                   }}
-                  value={noteToEdit?.tag}
-                  onChange={(e) => setNoteToEdit({ ...note, tag: e.target.value })}
+                  onChange={(e) => setNoteToEdit((prevNote: any) => ({
+                    ...prevNote,
+                    tag: e.target.value
+                  }))}
                 >
                   {tags.length >= 0 && (
                     tags.map((tag) => (

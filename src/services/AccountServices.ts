@@ -2,7 +2,7 @@ import axios from "axios";
 import { Account } from "../Interfaces/Account";
 
 
-const urlAccount = "  http://localhost:3000/users"
+const urlAccount = "http://localhost:3000/users"
 
 export function createAccount(account: Account): Promise<Account> {
 
@@ -11,6 +11,7 @@ export function createAccount(account: Account): Promise<Account> {
             name: account.name,
             email: account.email,
             password: account.password,
+            image: account.image
         })
     )
 }
@@ -27,3 +28,9 @@ export async function getAccount(): Promise<Account[]> {
     }
 
 } 
+
+export function editProfile(account: Account | null) {
+    const editProfile = `${urlAccount}/${account?.id}`
+
+    return axios.put(editProfile, account)
+}

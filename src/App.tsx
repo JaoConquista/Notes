@@ -5,11 +5,13 @@ import dark from "./styles/themes/dark";
 import PageNotes from "./pages/Notes/PageNotes";
 import Login from "./pages/Login/Login";
 import CreateAccount from "./pages/CreateAccount/CreateAccount";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import GlobalStyle from "../global"
 import AddNotePage from "../src/pages/AddNote/AddNotePage"
 import { useTag } from "./hooks/useTag";
-import usePersistedState from "./hooks/usePersistedState"
+import usePersistedState from "./hooks/usePersistedState";
+import EditProfile from "./pages/EditProfile/EditProfile";
+import { Account } from "./Interfaces/Account";
 
 interface Component {
   component: JSX.Element
@@ -22,7 +24,9 @@ function App() {
   const toggleTheme = () => {
     setTheme(theme.title === 'light' ? dark : light);
   }
-  
+
+  const [user, setUser] = useState<Account>()
+
   const AuthenticatedRoute = ({ component }: Component) => {
 
     if (localStorage.getItem("auth") === "true") {
@@ -37,29 +41,39 @@ function App() {
     }
   }
 
-  const [tags] = useState(["Work", "Dreams", "Travel", "Food", "Study"])  
+  const userAuth = (user: Account) => {
+    setUser(user)
+  }
+  console.log(user)
+  const [tags] = useState(["Work", "Dreams", "Travel", "Food", "Study"])
 
   useTag(tags)
- 
+
 
   return (
     <div className="App">
-        <ThemeProvider theme={theme}>
-          <GlobalStyle/>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<CreateAccount />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/notes" element={<AuthenticatedRoute component={<PageNotes toggleTheme={toggleTheme} tags={tags}/>} />}/>
-              <Route path="/notes/addNote" element={<AuthenticatedRoute component={<AddNotePage tags={tags}/>} />}/>
-            </Routes>
-          </BrowserRouter>
-        </ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<CreateAccount />} />
+            <Route path="/login" element={<Login userAuth={userAuth} />} />
+            <Route path="/notes" element={<AuthenticatedRoute component={<PageNotes toggleTheme={toggleTheme} tags={tags} user={user} />} />} />
+            <Route path="/notes/addNote" element={<AuthenticatedRoute component={<AddNotePage tags={tags} />} />} />
+            <Route path="/notes/edit-profile" element={<AuthenticatedRoute component={<EditProfile user={user} userAuth={userAuth}/>} />} />
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
     </div >
 
   );
 }
 
 export default App;
+
+
+
+
+
 
 

@@ -10,13 +10,18 @@ import { ToastContainer } from "react-toastify";
 import { errorEmail, errorPassword } from "../../utils/toast";
 import { useAuth } from "../../hooks/useAuth";
 import { ThemeContext } from "styled-components";
+import { Accordion } from '@mui/material';
 
 type LoginProps = {
   email: string,
   senha: string
 }
 
-const Login = () => {
+interface Props {
+  userAuth: (user: Account ) => void
+}
+
+const Login = ({userAuth}: Props) => {
 
   const {colors} = useContext(ThemeContext)
 
@@ -30,6 +35,8 @@ const Login = () => {
   })
 
   const [userList, setUserList] = useState<Account[]>([])
+
+  const [user, setUser] = useState<Account>()
 
   useEffect(() => {
 
@@ -53,6 +60,11 @@ const Login = () => {
     const isPasswordValid =
       userList.filter((user) => user.password == (userLogin.senha)).length > 0
 
+    const account:Account[]= 
+      userList.filter((user) => user.email == (userLogin.email))
+
+    setUser(account[0])
+
     if (!isEmailValid) {
       errorEmail()
     } else if (!isPasswordValid) {
@@ -61,15 +73,9 @@ const Login = () => {
 
     if (isEmailValid && isPasswordValid) {
 
-      console.log(isEmailValid, isPasswordValid)
-
+      userAuth(account[0])
+ 
       auth()
-
-
-      /**De alguma  forma o navigate estava sendo executado antes do estado
-       * isAuth ser alterado para true, ou seja, mesmo que o login seja
-       * realizado o componente não era validado.
-       */
 
       setTimeout(() => navigate("/notes"), 1000)
     }
