@@ -22,6 +22,21 @@ export async function getNote(): Promise<INoteContent[]> {
   return reversedNotes;
 }
 
+export function teste() {
+  let localNotes: string | null = localStorage.getItem("notes")
+  let notes
+
+  if(localNotes?.length != 0){
+    notes = JSON.parse(localNotes)
+  }else{
+    return
+  }
+
+  const reversedNotes = notes.reverse()
+
+  return reversedNotes
+}
+
 export async function deleteNote(noteId: number) {
   try {
     const response = await axios.delete(`${urlNotes}/${noteId}`);

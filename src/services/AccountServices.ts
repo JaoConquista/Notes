@@ -11,7 +11,8 @@ export function createAccount(account: Account): Promise<Account> {
             name: account.name,
             email: account.email,
             password: account.password,
-            image: account.image
+            image: account.image,
+            notes: account.note
         })
     )
 }

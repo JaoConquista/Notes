@@ -104,7 +104,7 @@ const PageNotes = ({ toggleTheme, tags, user }: Props) => {
 
   const handleEdit = (note: INoteContent) => {
     setNoteToEdit(note);
-    
+
 
     setShowModal(true);
   };
@@ -236,7 +236,7 @@ const PageNotes = ({ toggleTheme, tags, user }: Props) => {
             <hr />
 
             <Button
-            sx={{borderRadius: "100px"}}
+              sx={{ borderRadius: "100px" }}
               onClick={() => navigate("/notes/edit-profile")}>
               <Avatar
                 alt="João"
@@ -247,7 +247,19 @@ const PageNotes = ({ toggleTheme, tags, user }: Props) => {
 
           <Content>
             
-            
+            <Button
+              onClick={() => navigate("/notes/addNote")}
+              sx={{
+                background: '#3A3A3A',
+                border: `3px solid ${colors.background}`, borderRadius: "100px", height: "58px", width: "58px",
+                display: "flex", justifyContent: "center", position: "relative",
+                zIndex: "1", '&:hover': {
+                  background: colors.inputBackground,
+                }
+              }}>
+              <AddIcon fontSize="medium" sx={{ color: "#ccc" }} />
+            </Button>
+
           </Content>
 
           <TagsContent>

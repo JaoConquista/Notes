@@ -43,8 +43,11 @@ function App() {
 
   const userAuth = (user: Account) => {
     setUser(user)
+
+    localStorage.setItem("notes" , JSON.stringify(user.note))
   }
   console.log(user)
+
   const [tags] = useState(["Work", "Dreams", "Travel", "Food", "Study"])
 
   useTag(tags)
