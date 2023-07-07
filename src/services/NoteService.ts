@@ -3,6 +3,7 @@ import { INoteContent } from "../Interfaces/INote";
 
 const urlNotes = "http://localhost:3000/notes";
 
+
 export function postNote(note: INoteContent): Promise<any> {
   return axios.post(urlNotes, {
     title: note.title,
@@ -22,20 +23,20 @@ export async function getNote(): Promise<INoteContent[]> {
   return reversedNotes;
 }
 
-export function teste() {
-  let localNotes: string | null = localStorage.getItem("notes")
-  let notes
+// export function teste() {
+//   let localNotes = localStorage.getItem("notes")
+//   let notes: INoteContent[]
 
-  if(localNotes?.length != 0){
-    notes = JSON.parse(localNotes)
-  }else{
-    return
-  }
+//   if(localNotes !== null){
+//     notes = JSON.parse(localNotes)
+//   }else{
+//     notes = []
+//   }
 
-  const reversedNotes = notes.reverse()
+//   const reversedNotes = notes.reverse()
 
-  return reversedNotes
-}
+//   return reversedNotes
+// }
 
 export async function deleteNote(noteId: number) {
   try {

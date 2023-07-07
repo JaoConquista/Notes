@@ -33,15 +33,12 @@ import Menu from '@mui/material/Menu';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
-import { Account } from "../../Interfaces/Account";
-
 interface Props {
   toggleTheme(): void;
   tags: string[];
-  user: Account;
 }
 
-const PageNotes = ({ toggleTheme, tags, user }: Props) => {
+const PageNotes = ({ toggleTheme, tags }: Props) => {
   //Qual a melhor forma de inserir valores em um state de objetos ?
   const { logout } = useAuth()
 
@@ -77,26 +74,31 @@ const PageNotes = ({ toggleTheme, tags, user }: Props) => {
     ) : [];
 
   useEffect(() => {
-    fecthData();
-    setPerfilImage(user?.image)
+    fetchData();
+
+    let userImage = localStorage.getItem("userImage")
+    
+    if (userImage) {
+      let convertedImage = JSON.parse(userImage)
+      setPerfilImage(convertedImage);
+    }
+   
   }, []);
-
-
-
 
   const notesToShow = searchInput.length > 0 ? filteredNotes : noteList;
   const tagsToShow = tagSelected.length > 0 ? filteredTags : noteList;
+
 
   const removeNote = async (id: number) => {
     await deleteNote(id);
 
     console.log(`Card ${id} foi deletado`);
 
-    await fecthData();
+    await fetchData();
   };
 
 
-  const fecthData = async () => {
+  const fetchData = async () => {
     const data = await getNote();
 
     setNoteList(data);
@@ -121,7 +123,7 @@ const PageNotes = ({ toggleTheme, tags, user }: Props) => {
 
     const result: any = await Promise.all([
       editNote(note),
-      fecthData()
+      fetchData()
     ])
 
     result[0];
@@ -137,7 +139,7 @@ const PageNotes = ({ toggleTheme, tags, user }: Props) => {
     setShowModal(false);
     clearNoteToEdit();
 
-    await fecthData();
+    await fetchData();
   };
 
   const clearNoteToEdit = () => {
@@ -239,14 +241,12 @@ const PageNotes = ({ toggleTheme, tags, user }: Props) => {
               sx={{ borderRadius: "100px" }}
               onClick={() => navigate("/notes/edit-profile")}>
               <Avatar
-                alt="João"
-                src={`${user?.image}`}
+                src={perfilImage}
                 sx={{ margin: "10px" }} />
             </Button>
           </Search>
 
           <Content>
-            
             <Button
               onClick={() => navigate("/notes/addNote")}
               sx={{

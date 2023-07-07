@@ -25,7 +25,7 @@ function App() {
     setTheme(theme.title === 'light' ? dark : light);
   }
 
-  const [user, setUser] = useState<Account>()
+  const [user, setUser] = useState<Account | null>()
 
   const AuthenticatedRoute = ({ component }: Component) => {
 
@@ -41,12 +41,17 @@ function App() {
     }
   }
 
-  const userAuth = (user: Account) => {
+  const userAuth = (user: Account | null) => {
+
     setUser(user)
 
-    localStorage.setItem("notes" , JSON.stringify(user.note))
+    localStorage.setItem("userImage", JSON.stringify(user?.image))
+
+    localStorage.setItem("userName", JSON.stringify(user?.name))
+
+    localStorage.setItem("id", JSON.stringify(user?.id))
+    
   }
-  console.log(user)
 
   const [tags] = useState(["Work", "Dreams", "Travel", "Food", "Study"])
 
@@ -61,9 +66,9 @@ function App() {
           <Routes>
             <Route path="/" element={<CreateAccount />} />
             <Route path="/login" element={<Login userAuth={userAuth} />} />
-            <Route path="/notes" element={<AuthenticatedRoute component={<PageNotes toggleTheme={toggleTheme} tags={tags} user={user} />} />} />
+            <Route path="/notes" element={<AuthenticatedRoute component={<PageNotes toggleTheme={toggleTheme} tags={tags}/>} />} />
             <Route path="/notes/addNote" element={<AuthenticatedRoute component={<AddNotePage tags={tags} />} />} />
-            <Route path="/notes/edit-profile" element={<AuthenticatedRoute component={<EditProfile user={user} userAuth={userAuth}/>} />} />
+            <Route path="/notes/edit-profile" element={<AuthenticatedRoute component={<EditProfile userAuth={userAuth} />} />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
@@ -73,10 +78,3 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
-

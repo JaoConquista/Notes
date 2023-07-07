@@ -28,7 +28,19 @@ export async function getAccount(): Promise<Account[]> {
         return []
     }
 
-} 
+}
+
+export async function getUser(userId: number): Promise<Account> {
+    const userEndPoint = `${urlAccount}/${userId}`
+    try {
+        const response = await axios.get<Account>(userEndPoint)
+        const userData = response.data
+        return userData;
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}
 
 export function editProfile(account: Account | null) {
     const editProfile = `${urlAccount}/${account?.id}`

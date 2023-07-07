@@ -8,15 +8,14 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Account } from '../../Interfaces/Account'
 import { ThemeContext } from 'styled-components'
 import { useNavigate } from 'react-router-dom'
-import { editProfile, getAccount } from '../../services/AccountServices';
+import { editProfile, getUser } from '../../services/AccountServices';
 
 
 interface EditProps {
-    user: Account;
-    userAuth: (user: Account) => void;
+    userAuth: (user: Account | null) => void;
 }
 
-function EditProfile({ user, userAuth}: EditProps) {
+function EditProfile({ userAuth }: EditProps) {
 
     const navigate = useNavigate()
 
@@ -24,14 +23,24 @@ function EditProfile({ user, userAuth}: EditProps) {
     const [profile, setProfile] = useState<Account | null>(null)
 
     useEffect(() => {
-        setProfile(user)
+        var stringId = localStorage.getItem("id")
+        if (stringId) {
+            var userId = parseInt(stringId)
+            getAccount(userId)
+        }
     }, [])
 
+    async function getAccount(idUser: number) {
+        const data = await getUser(idUser)
+
+        setProfile(data)
+    }
+
     const editAccount = async (data: Account | null) => {
-    
+
         try {
             editProfile(data)
-            
+
             userAuth(data)
 
             navigate("/notes")
@@ -47,7 +56,7 @@ function EditProfile({ user, userAuth}: EditProps) {
         <Main>
             <Search>
                 <Button
-                onClick={() => editAccount(profile)}
+                    onClick={() => editAccount(profile)}
                     sx={{
                         background: '#3A3A3A',
                         borderRadius: "100px", height: "50px", width: "58px",
@@ -75,60 +84,105 @@ function EditProfile({ user, userAuth}: EditProps) {
             <div id="content-1">
                 <div id="profile-img">
 
-                    <Avatar
-                        src={`${profile?.image}`}
-                        sx={{width: "300px", height: "300px"}} 
-                    />
+                    <img src={`${profile?.image}`} alt="" />
 
                     <h3>{profile?.name}</h3>
 
                     <h4>Você tem 12 notas</h4>
                 </div>
                 <div id="inputs">
-                        <TextField
-                            id="filled-basic"
-                            label="Nome"
-                            value={profile?.name}
-                            variant="filled"
-                            onChange={(e) =>
-                                setProfile((prevProfile: any) => ({
-                                    ...prevProfile,
-                                    name: e.target.value
-                                }))} />
+                    <TextField
+                        id="filled-basic"
+                        label="Nome"
+                        value={profile?.name}
+                        sx={{
+                            color: `${colors.text2}`,
+                            '.MuiOutlinedInput-notchedOutline': {
+                                border: `1px solid ${colors.text2}`,
+                            }
+                        }}
+                        inputProps={{
+                            style: { color: `${colors.text2}` }
+                        }}
+                        InputLabelProps={{
+                            style: { color: `${colors.text2}` }
+                        }}
+                        variant="filled"
+                        onChange={(e) =>
+                            setProfile((prevProfile: any) => ({
+                                ...prevProfile,
+                                name: e.target.value
+                            }))} />
 
-                        <TextField
-                            id="filled-basic"
-                            label="Email"
-                            type='email'
-                            value={profile?.email}
-                            variant="filled"
-                            onChange={(e) =>
-                                setProfile((prevProfile: any) => ({
-                                    ...prevProfile,
-                                    email: e.target.value
-                                }))} />
+                    <TextField
+                        id="filled-basic"
+                        label="Email"
+                        sx={{
+                            color: `${colors.text2}`,
+                            '.MuiOutlinedInput-notchedOutline': {
+                                border: `1px solid ${colors.text2}`,
+                            }
+                        }}
+                        inputProps={{
+                            style: { color: `${colors.text2}` }
+                        }}
+                        InputLabelProps={{
+                            style: { color: `${colors.text2}` }
+                        }}
+                        type='email'
+                        value={profile?.email}
+                        variant="filled"
+                        onChange={(e) =>
+                            setProfile((prevProfile: any) => ({
+                                ...prevProfile,
+                                email: e.target.value
+                            }))} />
 
-                        <TextField
-                            id="filled-basic"
-                            label="Link da Foto"
-                            value={profile?.image}
-                            variant="filled"
-                            onChange={(e) =>
-                                setProfile((prevProfile: any) => ({
-                                    ...prevProfile,
-                                    image: e.target.value
-                                }))} />
+                    <TextField
+                        id="filled-basic"
+                        label="Link da Foto"
+                        value={profile?.image}
+                        sx={{
+                            color: `${colors.text2}`,
+                            '.MuiOutlinedInput-notchedOutline': {
+                                border: `1px solid ${colors.text2}`,
+                            }
+                        }}
+                        inputProps={{
+                            style: { color: `${colors.text2}` }
+                        }}
+                        InputLabelProps={{
+                            style: { color: `${colors.text2}` }
+                        }}
+                        variant="filled"
+                        onChange={(e) =>
+                            setProfile((prevProfile: any) => ({
+                                ...prevProfile,
+                                image: e.target.value
+                            }))} />
 
-                        <TextField
-                            id="filled-basic"
-                            label="Senha"
-                            value={profile?.password}
-                            variant="filled"
-                            onChange={(e) =>
-                                setProfile((prevProfile: any) => ({
-                                    ...prevProfile,
-                                    password: e.target.value
-                                }))} />
+                    <TextField
+                        id="filled-basic"
+                        label="Senha"
+                        sx={{
+                            color: `${colors.text2}`,
+                            '.MuiOutlinedInput-notchedOutline': {
+                                border: `1px solid ${colors.text2}`,
+                            }
+                        }}
+                        inputProps={{
+                            style: { color: `${colors.text2}` }
+                        }}
+                        InputLabelProps={{
+                            style: { color: `${colors.text2}` }
+                        }}
+                        value={profile?.password}
+                        variant="filled"
+                        onChange={(e) =>
+                            setProfile((prevProfile: any) => ({
+                                ...prevProfile,
+                                password: e.target.value
+                            }))} />
                 </div>
             </div>
             <div id="footer-position">

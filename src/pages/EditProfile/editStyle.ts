@@ -12,6 +12,22 @@ img{
     h3{
         margin: 10px;
     }
+
+    img{
+        width: 350px;
+        height: 350px;
+        border-radius: 200px;
+
+        @media only screen and (max-width : 758px){
+            width: 250px;
+            height: 250px;
+        }
+
+        @media only screen and (max-width : 628px){
+            width: 200px;
+            height: 200px;
+        }
+    }
 }
 
 #footer-position{
@@ -34,7 +50,15 @@ img{
         justify-content: space-around;
         align-items: center;
     }
+
+    
 }
+@media only screen and (max-width : 428px){
+            #content-1{
+                display: flex;
+                flex-direction: column;
+            }
+        }
 `
 
 
