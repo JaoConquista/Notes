@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { TotalNotesContext } from '../../contexts/TotalNotesContext';
 import { Main, Footer, Search } from './editStyle'
 import ClearIcon from '@mui/icons-material/Clear';
-import { Avatar, Button, IconButton, TextField, colors } from '@mui/material'
+import { Button, IconButton, TextField } from '@mui/material'
 import CheckIcon from "@mui/icons-material/Check";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
@@ -9,6 +10,8 @@ import { Account } from '../../Interfaces/Account'
 import { ThemeContext } from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import { editProfile, getUser } from '../../services/AccountServices';
+
+
 
 
 interface EditProps {
@@ -21,6 +24,7 @@ function EditProfile({ userAuth }: EditProps) {
 
     const { colors } = useContext(ThemeContext)
     const [profile, setProfile] = useState<Account | null>(null)
+    const { total } = useContext(TotalNotesContext)
 
     useEffect(() => {
         var stringId = localStorage.getItem("id")
@@ -54,6 +58,7 @@ function EditProfile({ userAuth }: EditProps) {
 
     return (
         <Main>
+
             <Search>
                 <Button
                     onClick={() => editAccount(profile)}
@@ -87,13 +92,12 @@ function EditProfile({ userAuth }: EditProps) {
                     <img src={`${profile?.image}`} alt="" />
 
                     <h3>{profile?.name}</h3>
-
-                    <h4>Você tem 12 notas</h4>
+                    <p>Você tem  {total} notas</p>
                 </div>
                 <div id="inputs">
                     <TextField
                         id="filled-basic"
-                        label="Nome"
+                        label={profile?.name ? '' : 'Nome'}
                         value={profile?.name}
                         sx={{
                             color: `${colors.text2}`,
@@ -116,7 +120,7 @@ function EditProfile({ userAuth }: EditProps) {
 
                     <TextField
                         id="filled-basic"
-                        label="Email"
+                        label={profile?.email ? "" : "E-mail"}
                         sx={{
                             color: `${colors.text2}`,
                             '.MuiOutlinedInput-notchedOutline': {
@@ -140,7 +144,7 @@ function EditProfile({ userAuth }: EditProps) {
 
                     <TextField
                         id="filled-basic"
-                        label="Link da Foto"
+                        label={profile?.image ? "" : "Link da foto"}
                         value={profile?.image}
                         sx={{
                             color: `${colors.text2}`,
@@ -163,7 +167,7 @@ function EditProfile({ userAuth }: EditProps) {
 
                     <TextField
                         id="filled-basic"
-                        label="Senha"
+                        label={profile?.password ? "" : "Senha"}
                         sx={{
                             color: `${colors.text2}`,
                             '.MuiOutlinedInput-notchedOutline': {

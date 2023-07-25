@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import TextField from "@mui/material/TextField";
 import { Main, Form } from "./stylesLogin"
-import SubmitButton from "../../components/SubmitButton";
+import SubmitButton from "../../components/Buttons/SubmitButton";
 import { Link, useNavigate } from "react-router-dom"
 import { getAccount } from "../../services/AccountServices";
 import { useEffect, useState } from "react";

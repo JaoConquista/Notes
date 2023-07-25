@@ -1,5 +1,4 @@
 import Button from "@mui/material/Button"
-import AddIcon from '@mui/icons-material/Add';
 
 type SubmitButton = {
   name: string

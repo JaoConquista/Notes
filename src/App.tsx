@@ -12,6 +12,7 @@ import { useTag } from "./hooks/useTag";
 import usePersistedState from "./hooks/usePersistedState";
 import EditProfile from "./pages/EditProfile/EditProfile";
 import { Account } from "./Interfaces/Account";
+import { TotalNotesContextProvider } from "./contexts/TotalNotesContext";
 
 interface Component {
   component: JSX.Element
@@ -50,7 +51,7 @@ function App() {
     localStorage.setItem("userName", JSON.stringify(user?.name))
 
     localStorage.setItem("id", JSON.stringify(user?.id))
-    
+
   }
 
   const [tags] = useState(["Work", "Dreams", "Travel", "Food", "Study"])
@@ -58,18 +59,22 @@ function App() {
   useTag(tags)
 
 
+
+
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<CreateAccount />} />
-            <Route path="/login" element={<Login userAuth={userAuth} />} />
-            <Route path="/notes" element={<AuthenticatedRoute component={<PageNotes toggleTheme={toggleTheme} tags={tags}/>} />} />
-            <Route path="/notes/addNote" element={<AuthenticatedRoute component={<AddNotePage tags={tags} />} />} />
-            <Route path="/notes/edit-profile" element={<AuthenticatedRoute component={<EditProfile userAuth={userAuth} />} />} />
-          </Routes>
+          <TotalNotesContextProvider>
+            <Routes>
+              <Route path="/" element={<CreateAccount />} />
+              <Route path="/login" element={<Login userAuth={userAuth} />} />
+              <Route path="/notes" element={<AuthenticatedRoute component={<PageNotes toggleTheme={toggleTheme} tags={tags} />} />} />
+              <Route path="/notes/addNote" element={<AuthenticatedRoute component={<AddNotePage tags={tags} />} />} />
+              <Route path="/notes/edit-profile" element={<AuthenticatedRoute component={<EditProfile userAuth={userAuth} />} />} />
+            </Routes>
+          </TotalNotesContextProvider>
         </BrowserRouter>
       </ThemeProvider>
     </div >

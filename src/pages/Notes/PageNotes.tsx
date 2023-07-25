@@ -1,6 +1,6 @@
-import React, { useContext } from "react"
+import React, { createContext, useContext } from "react"
 import { useEffect, useState } from "react";
-import NoteCard from "../../components/NoteCard";
+import NoteCard from "../../components/NoteCard/NoteCard";
 import { INoteContent } from "../../Interfaces/INote";
 import Modal from "../Modal/Modal";
 import {
@@ -33,6 +33,9 @@ import Menu from '@mui/material/Menu';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
+import { TotalNotesContext } from '../../contexts/TotalNotesContext';
+
+import { Divider } from "@mui/material";
 interface Props {
   toggleTheme(): void;
   tags: string[];
@@ -54,7 +57,8 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
   const [tagSelected, setTagSelected] = useState("All");
 
   const [isSelected, setIsSelected] = useState(false);
-  const [perfilImage, setPerfilImage] = useState("")
+  const [perfilImage, setPerfilImage] = useState("");
+  const { total, setTotal } = useContext(TotalNotesContext);
 
   //filtro de notas
   const filteredNotes =
@@ -84,7 +88,7 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
     }
    
   }, []);
-
+  
   const notesToShow = searchInput.length > 0 ? filteredNotes : noteList;
   const tagsToShow = tagSelected.length > 0 ? filteredTags : noteList;
 
@@ -102,6 +106,8 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
     const data = await getNote();
 
     setNoteList(data);
+
+    setTotal(data.length)
   };
 
   const handleEdit = (note: INoteContent) => {
@@ -233,9 +239,8 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
                 </IconButton>
               </Tooltip>
             </Box>
-
-
-            <hr />
+            
+            <Divider orientation="vertical"/>
 
             <Button
               sx={{ borderRadius: "100px" }}
@@ -268,7 +273,7 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
                 id={tagSelected === "All" ? 'tag-btn-selected' : 'tag-btn'}
                 onClick={() => handleTagClick('All')}
               >
-                All({noteList.length})
+                All({total})
               </button>
             </div>
             {tags?.length !== 0 && (

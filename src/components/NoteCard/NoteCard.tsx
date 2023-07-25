@@ -1,13 +1,7 @@
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-
-import { INoteContent } from "../Interfaces/INote";
+import { INoteContent } from "../../Interfaces/INote";
 import { CardStyled, Image } from "./NotesCard.style";
 
 
@@ -41,7 +35,6 @@ const NoteCard = ({ note, color, onEdit }: NoteCard) => {
           </CardContent>
         </Card>
       </CardStyled>
-
     </div>
 
 

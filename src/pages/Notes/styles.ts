@@ -268,6 +268,11 @@ export const TagsContent = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+    
+  @media only screen and (min-width: 510px){
+    display: flex;
+    justify-content: center;
+  }
 
   #tag-btn{
     min-width: 70px;
