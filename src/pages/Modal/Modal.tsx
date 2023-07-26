@@ -21,6 +21,7 @@ import { useContext, useEffect, useState, useCallback } from "react";
 import { INoteContent } from "../../Interfaces/INote";
 import { autoResize } from "../../services/NoteService";
 import { debounce } from 'lodash';
+import { Box } from "@mui/material";
 
 type Props = {
   note: INoteContent;
@@ -74,7 +75,7 @@ const Modal = ({ note, onClose, onDelete, submit, tags }: Props) => {
 
     }
   }
-console.log(stackCounter)
+  console.log(stackCounter)
   const redoNote = () => {
 
     if (stackCounter > 0) {
@@ -118,22 +119,10 @@ console.log(stackCounter)
         <Title>
           <h1>Notes</h1>
         </Title>
-        <Button
-          onClick={() => handleSubmitClick()}
-          sx={{
-            background: '#3A3A3A',
-            borderRadius: "100px", height: "50px", width: "58px",
-            display: "flex", justifyContent: "center", position: "relative",
-            zIndex: "1", '&:hover': {
-              background: colors.inputBackground,
-            }
-          }}>
-          <CheckIcon fontSize="medium" sx={{ color: "#ccc" }} />
-        </Button>
-
-        <div className="undo-redo-controls">
+        <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', 
+                 width: '100%'}}>
           <Button
-            onClick={() => undoNote()}
+            onClick={() => handleSubmitClick()}
             sx={{
               background: '#3A3A3A',
               borderRadius: "100px", height: "50px", width: "58px",
@@ -142,33 +131,49 @@ console.log(stackCounter)
                 background: colors.inputBackground,
               }
             }}>
-            <UndoIcon fontSize="medium" sx={{ color: "#ccc" }} />
+            <CheckIcon fontSize="medium" sx={{ color: "#ccc" }} />
           </Button>
+
+          <div className="undo-redo-controls">
+            <Button
+              onClick={() => undoNote()}
+              sx={{
+                background: '#3A3A3A',
+                borderRadius: "100px", height: "50px", width: "58px",
+                display: "flex", justifyContent: "center", position: "relative",
+                zIndex: "1", '&:hover': {
+                  background: colors.inputBackground,
+                }
+              }}>
+              <UndoIcon fontSize="medium" sx={{ color: "#ccc" }} />
+            </Button>
+            <Button
+              onClick={() => redoNote()}
+              sx={{
+                background: '#3A3A3A',
+                borderRadius: "100px", height: "50px", width: "58px",
+                display: "flex", justifyContent: "center", position: "relative",
+                zIndex: "1", '&:hover': {
+                  background: colors.inputBackground,
+                }
+              }}>
+              <RedoIcon fontSize="medium" sx={{ color: "#ccc" }} />
+            </Button>
+          </div>
+
           <Button
-            onClick={() => redoNote()}
             sx={{
               background: '#3A3A3A',
-              borderRadius: "100px", height: "50px", width: "58px",
+              borderRadius: "100px", height: "50px", width: "38px",
               display: "flex", justifyContent: "center", position: "relative",
               zIndex: "1", '&:hover': {
                 background: colors.inputBackground,
               }
             }}>
-            <RedoIcon fontSize="medium" sx={{ color: "#ccc" }} />
+            <MoreVertIcon fontSize="small" sx={{ color: "#ccc" }} />
           </Button>
-        </div>
+        </Box>
 
-        <Button
-          sx={{
-            background: '#3A3A3A',
-            borderRadius: "100px", height: "50px", width: "38px",
-            display: "flex", justifyContent: "center", position: "relative",
-            zIndex: "1", '&:hover': {
-              background: colors.inputBackground,
-            }
-          }}>
-          <MoreVertIcon fontSize="small" sx={{ color: "#ccc" }} />
-        </Button>
 
       </Search>
 
@@ -178,7 +183,7 @@ console.log(stackCounter)
             <div id="select-tags">
               <BookmarkBorderOutlinedIcon />
               <FormControl variant="outlined" sx={{
-                
+
                 m: 1, minWidth: 90,
                 border: 'transparent', // ou border: 'transparent'
                 '&:focus': {
