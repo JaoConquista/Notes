@@ -8,6 +8,7 @@ ISSO VAI FAZER COM QUE O PROGRAMA CONSIGA SALVAR LOCALMENTE OS DADOS E PERSISTIR
 
 2 - VOCÊ DEVE RODAR O COMANDO 'npm run dev' PARA QUE A APLICAÇÃO COMECE A RODAR NA PORTA 5173
 
+[![Watch the video]](https://youtu.be/uRzeh_lTriU)
 
 <img src="./src/assets/img1.png">
 
