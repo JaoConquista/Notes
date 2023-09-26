@@ -1,16 +1,14 @@
-import { useContext } from 'react'
 import TextField from "@mui/material/TextField";
-import { Main, Form } from "./stylesLogin"
-import SubmitButton from "../../components/Buttons/SubmitButton";
-import { Link, useNavigate } from "react-router-dom"
-import { getAccount } from "../../services/AccountServices";
-import { useEffect, useState } from "react";
-import { Account } from "../../Interfaces/Account";
+import { useContext, useEffect, useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { errorEmail, errorPassword } from "../../utils/toast";
-import { useAuth } from "../../hooks/useAuth";
 import { ThemeContext } from "styled-components";
-import { Accordion } from '@mui/material';
+import { Account } from "../../Interfaces/Account";
+import SubmitButton from "../../components/Buttons/SubmitButton";
+import { useAuth } from "../../hooks/useAuth";
+import { getAccount } from "../../services/AccountServices";
+import { errorEmail, errorPassword } from "../../utils/toast";
+import { Form, Main } from "./stylesLogin";
 
 type LoginProps = {
   email: string,
@@ -36,8 +34,6 @@ const Login = ({userAuth}: Props) => {
 
   const [userList, setUserList] = useState<Account[]>([])
 
-  const [user, setUser] = useState<Account>()
-
   useEffect(() => {
 
     fetchUsers()
@@ -62,8 +58,6 @@ const Login = ({userAuth}: Props) => {
 
     const account:Account[]= 
       userList.filter((user) => user.email == (userLogin.email))
-
-    setUser(account[0])
 
     if (!isEmailValid) {
       errorEmail()

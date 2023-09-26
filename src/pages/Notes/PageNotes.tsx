@@ -1,38 +1,37 @@
-import React, { createContext, useContext } from "react"
-import { useEffect, useState } from "react";
-import NoteCard from "../../components/NoteCard/NoteCard";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Switch from 'react-switch';
 import { INoteContent } from "../../Interfaces/INote";
-import Modal from "../Modal/Modal";
+import NoteCard from "../../components/NoteCard/NoteCard";
+import { useAuth } from "../../hooks/useAuth";
 import {
   deleteNote,
-  getNote,
   editNote,
+  getNote,
 } from "../../services/NoteService";
-import { useAuth } from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
-import Switch from 'react-switch'
+import Modal from "../Modal/Modal";
 
 //Styles
-import { App, Content, Result, Search, Title, Footer, NavBar, TagsContent } from "./styles"
-import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
-import ModeIcon from '@mui/icons-material/Mode';
-import MicNoneRoundedIcon from '@mui/icons-material/MicNoneRounded';
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
-import Avatar from '@mui/material/Avatar';
 import MenuIcon from '@mui/icons-material/Menu';
-import { ThemeContext } from "styled-components";
+import MicNoneRoundedIcon from '@mui/icons-material/MicNoneRounded';
+import ModeIcon from '@mui/icons-material/Mode';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
 import { ToastContainer } from "react-toastify";
+import { ThemeContext } from "styled-components";
+import { App, Content, Footer, NavBar, Result, Search, TagsContent, Title } from "./styles";
 
 
+import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 import { TotalNotesContext } from '../../contexts/TotalNotesContext';
 
 import { Divider } from "@mui/material";
@@ -56,7 +55,6 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const [tagSelected, setTagSelected] = useState("All");
 
-  const [isSelected, setIsSelected] = useState(false);
   const [perfilImage, setPerfilImage] = useState("");
   const { total, setTotal } = useContext(TotalNotesContext);
 
@@ -168,7 +166,6 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
 
 
   const handleTagClick = (tag: string) => {
-    setIsSelected(true);
 
     setTagSelected(tag)
   }

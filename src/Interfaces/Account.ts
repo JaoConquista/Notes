@@ -1,8 +1,8 @@
 export interface Account {
-    id: number,
+    id?: number,
     name: string,
     email: string,
     password: string,
-    image: string,
-    note: [{}]
+    image?: string,
+    note?: [{}]
 }

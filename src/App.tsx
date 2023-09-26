@@ -26,8 +26,6 @@ function App() {
     setTheme(theme.title === 'light' ? dark : light);
   }
 
-  const [user, setUser] = useState<Account | null>()
-
   const AuthenticatedRoute = ({ component }: Component) => {
 
     if (localStorage.getItem("auth") === "true") {
@@ -43,8 +41,6 @@ function App() {
   }
 
   const userAuth = (user: Account | null) => {
-
-    setUser(user)
 
     localStorage.setItem("userImage", JSON.stringify(user?.image))
 
