@@ -21,9 +21,11 @@ const CreateAccount = () => {
   const { colors } = useContext(ThemeContext);
 
   const [user, setUser] = useState<IUser>({
+    id: 0,
     name: "",
     email: "",
-    password: ""
+    password: "",
+    image: ""
   })
 
 

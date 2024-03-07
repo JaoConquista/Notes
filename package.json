@@ -1,7 +1,7 @@
 {
-  "homepage":"https://JaoConquista.github.io/Notes",
+  "homepage": "https://JaoConquista.github.io/Notes",
   "name": "notes",
-  "private": true,
+  "private": false,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -42,6 +42,7 @@
     "eslint": "^8.38.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",
+    "gh-pages": "^6.1.1",
     "typescript": "^5.0.2",
     "vite": "^4.3.9"
   }

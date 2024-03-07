@@ -55,7 +55,7 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const [tagSelected, setTagSelected] = useState("All");
 
-  const [userId, setUserId] = useState(Number(localStorage.getItem("id")));
+  const [userId] = useState(Number(localStorage.getItem("id")));
   const [perfilImage, setPerfilImage] = useState("");
   const { total, setTotal } = useContext(TotalNotesContext);
 
