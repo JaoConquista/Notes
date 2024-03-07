@@ -1,22 +1,23 @@
 import axios from "axios";
 import { INoteContent } from "../Interfaces/INote";
 
-const urlNotes = "http://localhost:3000/notes";
+const urlNotes = "https://localhost:7072/api/Note";
 
 
 export function postNote(note: INoteContent): Promise<any> {
-  return axios.post(urlNotes, {
+  return axios.post(`${urlNotes}`,{
     title: note.title,
+    userId: note.userId,
     content: note.content,
     color: note.color,
     image: note.image,
-    tag: note.tag
+    tagId: note.tagId
   });
 }
 
-export async function getNote(): Promise<INoteContent[]> {
-  const response = await axios.get<INoteContent[]>(urlNotes);
-
+export async function getNote(userId: number): Promise<INoteContent[]> {
+  const response = await axios.get<INoteContent[]>(`${urlNotes}/${userId}`);
+  console.log(response.data)
   const notes = response.data;
   const reversedNotes = notes.reverse()
 
@@ -38,9 +39,13 @@ export async function getNote(): Promise<INoteContent[]> {
 //   return reversedNotes
 // }
 
-export async function deleteNote(noteId: number) {
+export async function deleteNote(noteId: number, userId: number) {
   try {
-    const response = await axios.delete(`${urlNotes}/${noteId}`);
+    const response = await axios.delete(`${urlNotes}/${noteId}`, {
+      params: {
+        userId: userId
+      }
+    });
 
     return response;
   } catch (error) {
@@ -51,7 +56,11 @@ export async function deleteNote(noteId: number) {
 export function editNote(note: INoteContent) {
   const editNoteUrl = `${urlNotes}/${note.id}`;
 
-  return axios.put(editNoteUrl, note);
+  return axios.put(editNoteUrl, note , {
+    params: {
+      userId: note.userId
+    }
+  });
 }
 
 export function autoResize(tagId: string) {

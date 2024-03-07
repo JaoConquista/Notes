@@ -55,6 +55,7 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const [tagSelected, setTagSelected] = useState("All");
 
+  const [userId, setUserId] = useState(Number(localStorage.getItem("id")));
   const [perfilImage, setPerfilImage] = useState("");
   const { total, setTotal } = useContext(TotalNotesContext);
 
@@ -71,7 +72,7 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
   const filteredTags =
     tagSelected !== "All" ? (
       noteList.filter(
-        (note) => note.tag == (tagSelected)
+        (note) => note.tagId == (tagSelected)
       )
     ) : [];
 
@@ -91,19 +92,17 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
   const tagsToShow = tagSelected.length > 0 ? filteredTags : noteList;
 
 
-  const removeNote = async (id: number) => {
-    await deleteNote(id);
-
-    console.log(`Card ${id} foi deletado`);
-
-    await fetchData();
+  const removeNote = async (id: number, userId: number) => {
+    await deleteNote(id, userId).then(() => fetchData());
   };
 
 
   const fetchData = async () => {
-    const data = await getNote();
+    const data = await getNote(userId);
 
     setNoteList(data);
+    console.log("data: ",data)
+
 
     setTotal(data.length)
   };
@@ -115,11 +114,8 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
     setShowModal(true);
   };
 
-  const handleDelete = (id: number) => {
-    removeNote(id)
-
-    clearNoteToEdit()
-
+  const handleDelete = async (id: number, userId: number) => {
+    await removeNote(id, userId).then(() => clearNoteToEdit());
   };
 
   const updateNote = async (note: INoteContent) => {
@@ -139,9 +135,7 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
   };
 
   const handleModalSubmit = async (note: INoteContent) => {
-    updateNote(note);
-    setShowModal(false);
-    clearNoteToEdit();
+    await updateNote(note).then(() => clearNoteToEdit());
 
     await fetchData();
   };
@@ -169,6 +163,8 @@ const PageNotes = ({ toggleTheme, tags }: Props) => {
 
     setTagSelected(tag)
   }
+
+  console.log(noteList);
   return (
     <App>
       <ToastContainer />

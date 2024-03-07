@@ -1,8 +1,7 @@
-export interface Account {
-    id?: number,
+export interface IUser {
+    id: number,
     name: string,
     email: string,
     password: string,
     image?: string,
-    note?: [{}]
 }

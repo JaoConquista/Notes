@@ -25,7 +25,7 @@ import { Box } from "@mui/material";
 
 type Props = {
   note: INoteContent;
-  onDelete: (id: number) => void;
+  onDelete: (id: number, userId: number) => void;
   onClose: () => void;
   submit: (note: INoteContent) => void;
   tags: string[]
@@ -190,7 +190,7 @@ const Modal = ({ note, onClose, onDelete, submit, tags }: Props) => {
                   border: 'transparent', // ou border: 'transparent'
                 },
               }}>
-                <InputLabel sx={{ color: `${colors.text2}` }}>{note?.tag}</InputLabel>
+                <InputLabel sx={{ color: `${colors.text2}` }}>{note?.tagId}</InputLabel>
                 <Select
                   labelId="demo-simple-select-standard-label"
                   id="demo-simple-select-standard"
@@ -210,7 +210,7 @@ const Modal = ({ note, onClose, onDelete, submit, tags }: Props) => {
                   }}
                   onChange={(e) => setNoteToEdit((prevNote: any) => ({
                     ...prevNote,
-                    tag: e.target.value
+                    tagId: e.target.value
                   }))}
                 >
                   {tags.length >= 0 && (
@@ -288,7 +288,7 @@ const Modal = ({ note, onClose, onDelete, submit, tags }: Props) => {
             }}>
             <ClearIcon sx={{ color: `#ccc` }} />
           </IconButton>
-          <IconButton onClick={() => onDelete(note.id)}
+          <IconButton onClick={() => onDelete(note.id, note.userId)}
             sx={{
               background: '#3A3A3A',
               borderRadius: "100px", height: "50px", width: "58px",

@@ -8,7 +8,7 @@ import { CreatAccount } from "./style";
 
 import { Link, useNavigate } from "react-router-dom"
 import { createAccount } from "../../services/AccountServices"
-import { Account } from "../../Interfaces/Account";
+import { IUser } from "../../Interfaces/Account";
 import { succesNotify } from "../../utils/toast";
 import { ThemeContext } from "styled-components";
 
@@ -20,7 +20,7 @@ const CreateAccount = () => {
 
   const { colors } = useContext(ThemeContext);
 
-  const [user, setUser] = useState<Account>({
+  const [user, setUser] = useState<IUser>({
     name: "",
     email: "",
     password: ""
