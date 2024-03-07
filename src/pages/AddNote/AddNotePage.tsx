@@ -40,7 +40,7 @@ const AddNotePage = ({ tags }: Props) => {
     "#a5f5a5", "#9ceef1", "#dfb1ec", "#ebf781", "#a5f5a5",
     "#f19c9c", "#dfb1ec"]
   
-  const [userId, setUserId] = useState(Number(localStorage.getItem("id")));
+  const [userId] = useState(Number(localStorage.getItem("id")));
   
   const [note, setNote] = useState<INoteContent>({
     id: userId,
