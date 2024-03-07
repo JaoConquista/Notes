@@ -39,28 +39,31 @@ const AddNotePage = ({ tags }: Props) => {
   const colorsList = ["#ebf781", "#a5f5a5", "#f19c9c", "#bab6f3", "#dfb1ec",
     "#a5f5a5", "#9ceef1", "#dfb1ec", "#ebf781", "#a5f5a5",
     "#f19c9c", "#dfb1ec"]
-
+  
+  const [userId, setUserId] = useState(Number(localStorage.getItem("id")));
+  
   const [note, setNote] = useState<INoteContent>({
-    id: 0,
+    id: userId,
+    userId: userId,
     title: "",
     content: "",
     color: "",
     image: "",
-    tag: ""
+    tagId: ""
   });
 
   const [image, setImage] = useState("")
-  const [tag, setTag] = React.useState("");
-  const { colors } = useContext(ThemeContext)
+  const [tagId, setTagId] = React.useState<string | undefined>("");
+  const { colors } = useContext(ThemeContext);
   const [notePilha, setNotePilha] = useState<INoteContent[]>([]);
-  let lastNote: INoteContent
-
+  let lastNote: INoteContent;
+  console.log(userId);
   useEffect(() => {
     autoResize('edit-title')
     autoResize('edit-content')
 
     setImage(note.image)
-    setTag(note.tag);
+    setTagId(note.tagId);
 
     if (!notePilha.includes(note)) {
       debouncedSave(note)
@@ -82,11 +85,9 @@ const AddNotePage = ({ tags }: Props) => {
 
     try {
 
-      await postNote(noteWithColor)
+      await postNote(noteWithColor).then(() => navigate("/notes"));
 
-      setNote({ id: note.id, title: " ", content: " ", color: "", image: "", tag: "" });
-
-      navigate('/notes')
+      setNote({ id: note.id, userId: note.userId ,title: " ", content: " ", color: "", image: "", tagId: "" });
 
     } catch (error) {
 
@@ -230,8 +231,8 @@ const AddNotePage = ({ tags }: Props) => {
                       fill: "white !important",
                     }
                   }}
-                  value={tag}
-                  onChange={(e) => setNote({ ...note, tag: e.target.value })}
+                  value={tagId}
+                  onChange={(e) => setNote({ ...note, tagId: e.target.value })}
                 >
                   {tags.length >= 0 && (
                     tags.map((tag, index) => (

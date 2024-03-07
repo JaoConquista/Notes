@@ -6,7 +6,7 @@ import { Button, IconButton, TextField } from '@mui/material'
 import CheckIcon from "@mui/icons-material/Check";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-import { Account } from '../../Interfaces/Account'
+import { IUser } from '../../Interfaces/Account'
 import { ThemeContext } from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import { editProfile, getUser } from '../../services/AccountServices';
@@ -15,7 +15,7 @@ import { editProfile, getUser } from '../../services/AccountServices';
 
 
 interface EditProps {
-    userAuth: (user: Account | null) => void;
+    userAuth: (user: IUser | null) => void;
 }
 
 function EditProfile({ userAuth }: EditProps) {
@@ -23,7 +23,7 @@ function EditProfile({ userAuth }: EditProps) {
     const navigate = useNavigate()
 
     const { colors } = useContext(ThemeContext)
-    const [profile, setProfile] = useState<Account | null>(null)
+    const [profile, setProfile] = useState<IUser | null>(null)
     const { total } = useContext(TotalNotesContext)
 
     useEffect(() => {
@@ -40,7 +40,7 @@ function EditProfile({ userAuth }: EditProps) {
         setProfile(data)
     }
 
-    const editAccount = async (data: Account | null) => {
+    const editAccount = async (data: IUser | null) => {
 
         try {
             editProfile(data)

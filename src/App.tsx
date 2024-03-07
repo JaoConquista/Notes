@@ -11,7 +11,7 @@ import AddNotePage from "../src/pages/AddNote/AddNotePage"
 import { useTag } from "./hooks/useTag";
 import usePersistedState from "./hooks/usePersistedState";
 import EditProfile from "./pages/EditProfile/EditProfile";
-import { Account } from "./Interfaces/Account";
+import { IUser } from "./Interfaces/Account";
 import { TotalNotesContextProvider } from "./contexts/TotalNotesContext";
 
 interface Component {
@@ -40,7 +40,7 @@ function App() {
     }
   }
 
-  const userAuth = (user: Account | null) => {
+  const userAuth = (user: IUser | null) => {
 
     localStorage.setItem("userImage", JSON.stringify(user?.image))
 

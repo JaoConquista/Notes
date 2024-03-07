@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { ThemeContext } from "styled-components";
-import { Account } from "../../Interfaces/Account";
+import { IUser } from "../../Interfaces/Account";
 import SubmitButton from "../../components/Buttons/SubmitButton";
 import { useAuth } from "../../hooks/useAuth";
 import { getAccount } from "../../services/AccountServices";
@@ -16,7 +16,7 @@ type LoginProps = {
 }
 
 interface Props {
-  userAuth: (user: Account ) => void
+  userAuth: (user: IUser ) => void
 }
 
 const Login = ({userAuth}: Props) => {
@@ -32,7 +32,8 @@ const Login = ({userAuth}: Props) => {
     senha: ""
   })
 
-  const [userList, setUserList] = useState<Account[]>([])
+  const [currentUser, setCurrentUser
+  ] = useState<IUser[]>([])
 
   useEffect(() => {
 
@@ -45,19 +46,19 @@ const Login = ({userAuth}: Props) => {
 
     const response = await getAccount()
 
-    setUserList(response)
+    setCurrentUser(response)
   }
 
   const userValidation = () => {
 
     const isEmailValid =
-      userList.filter((user) => user.email == (userLogin.email)).length > 0
+      currentUser.filter((user) => user.email == (userLogin.email)).length > 0
 
     const isPasswordValid =
-      userList.filter((user) => user.password == (userLogin.senha)).length > 0
+      currentUser.filter((user) => user.password == (userLogin.senha)).length > 0
 
-    const account:Account[]= 
-      userList.filter((user) => user.email == (userLogin.email))
+    const account:IUser[]= 
+      currentUser.filter((user) => user.email == (userLogin.email))
 
     if (!isEmailValid) {
       errorEmail()
@@ -80,6 +81,8 @@ const Login = ({userAuth}: Props) => {
     e.preventDefault()
 
     userValidation()
+
+    localStorage.setItem("id", currentUser[0].id.toString())
 
   }
 
